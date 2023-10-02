@@ -1,0 +1,11 @@
+Model Information:
+* title:	BOSS CH-1 Super Chorus .::RAWscan::.
+* source:	https://sketchfab.com/3d-models/boss-ch-1-super-chorus-rawscan-c405bb25e5374a11b9cdc0b8b821e662
+* author:	Andrea Spognetta (Spogna) (https://sketchfab.com/spogna)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "BOSS CH-1 Super Chorus .::RAWscan::." (https://sketchfab.com/3d-models/boss-ch-1-super-chorus-rawscan-c405bb25e5374a11b9cdc0b8b821e662) by Andrea Spognetta (Spogna) (https://sketchfab.com/spogna) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
