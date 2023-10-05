@@ -1,15 +1,20 @@
+import { useLoader } from "@react-three/fiber"
 import { RigidBody } from "@react-three/rapier"
 import { KOLORS } from "~/utils/globals"
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+
 
 export default function Grid() {
+  const gridMap = useLoader(TextureLoader, 'gridmap.png')
   return <>
     <RigidBody>
-      <mesh>
-        <gridHelper
-          args={[200, 40, KOLORS.FOOLS_GOLD, KOLORS.FOOLS_GOLD]}
-          rotation={[0, 0, 0]}
-          position={[0, -8, 0]}
+      <mesh
+        rotation={[-Math.PI * 0.49, 0, 0]}
+      >
+        <planeGeometry
+          args={[16, 8, 24, 24]}
         />
+        <meshStandardMaterial map={gridMap} />
       </mesh>
     </RigidBody>
   </>
