@@ -1,48 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
-import { Canvas, useFrame } from '@react-three/fiber'
-import { BossPedal } from '../components/BossPedal'
-import { useState, useRef } from "react"
-import * as THREE from 'three'
-// import { Mesh } from 'three'
-// import { Euler, Vector3, Color } from 'three'
-
-// type rotation = Euler || [x, y, z]
-// type position = Vector3 || [x, y, z] || scalar
-// type color = Color || 'hotpink' || 0xffffff
-
-import { api } from "~/utils/api";
-
-function Box(props: { position: THREE.Vector3 }) {
-  // This reference will give us direct access to the mesh
-  const meshRef = useRef<THREE.Mesh>(null!)
-  // Set up state for the hovered and active state
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => {
-    // meshRef.current?.rotation.x += delta
-  })
-  // Return view, these are regular three.js elements expressed in JSX
-  return (
-    <mesh
-      {...props}
-      ref={meshRef}
-      scale={active ? 1.5 : 1}
-      onClick={(event) => setActive(!active)}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-    </mesh>
-  )
-}
+import { Canvas } from '@react-three/fiber'
+import Grid from "~/components/Grid";
 
 export default function Home() {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
-  const meshRef = useRef<THREE.Mesh>(null!)
   return (
     <>
       <Head>
@@ -52,44 +12,9 @@ export default function Home() {
       </Head>
       <main id="main">
         <Canvas>
-          {/* <BossPedal /> */}
-
-          {/* <mesh
-          >
-            <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color={'blue'} />
-          </mesh> */}
-
-          {/* <ambientLight />
-          <pointLight position={[10, 10, 10]} />
-          <Box position={new THREE.Vector3(-1.2, 0, 0)} />
-          <Box position={new THREE.Vector3(1.2, 0, 0)} /> */}
+          <Grid />
         </Canvas>
       </main>
     </>
   );
 }
-
-// function AuthShowcase() {
-//   const { data: sessionData } = useSession();
-
-//   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-//     undefined, // no input
-//     { enabled: sessionData?.user !== undefined }
-//   );
-
-//   return (
-//     <div className="flex flex-col items-center justify-center gap-4">
-//       <p className="text-center text-2xl text-white">
-//         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-//         {secretMessage && <span> - {secretMessage}</span>}
-//       </p>
-//       <button
-//         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-//         onClick={sessionData ? () => void signOut() : () => void signIn()}
-//       >
-//         {sessionData ? "Sign out" : "Sign in"}
-//       </button>
-//     </div>
-//   );
-// }
