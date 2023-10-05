@@ -52,7 +52,7 @@ export default function Home() {
       </Head>
       <main id="main">
         <Canvas>
-          <BossPedal />
+          {/* <BossPedal /> */}
 
           {/* <mesh
           >
