@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Canvas } from '@react-three/fiber'
-import Grid from "~/components/Grid";
+import Experience from "~/components/Experience";
 
 export default function Home() {
   return (
@@ -11,8 +11,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main id="main">
-        <Canvas>
-          <Grid />
+        <Canvas
+          shadows
+        >
+          <Experience/>
         </Canvas>
       </main>
     </>
