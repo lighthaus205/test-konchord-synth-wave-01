@@ -6,7 +6,7 @@ import { Physics } from '@react-three/rapier'
 
 export default function Experience() {
   return <>
-    <Physics debug>
+    <Physics>
       <Lights />
       <Grid />
       <BossPedal />
