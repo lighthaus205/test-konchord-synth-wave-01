@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { Canvas } from '@react-three/fiber'
 import Experience from "~/components/Experience";
+import { KeyboardControls } from '@react-three/drei'
+
 
 export default function Home() {
   return (
@@ -11,11 +13,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main id="main">
-        <Canvas
-          shadows
+        <KeyboardControls
+          map={[
+            { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
+            { name: 'backward', keys: ['ArrowDown', 'KeyS'] },
+            { name: 'leftward', keys: ['ArrowLeft', 'KeyA'] },
+            { name: 'rightward', keys: ['ArrowRight', 'KeyD'] },
+            { name: 'jump', keys: ['Space'] },
+          ]}
         >
-          <Experience/>
-        </Canvas>
+          <Canvas
+            shadows
+          >
+            <Experience />
+          </Canvas>
+        </KeyboardControls>
       </main>
     </>
   );

@@ -1,11 +1,15 @@
 import Lights from "./Lights"
 import Grid from "./Grid"
 import { BossPedal } from "./BossPedal"
+import { Physics } from '@react-three/rapier'
+
 
 export default function Experience() {
   return <>
-    <Lights />
-    <Grid />
-    <BossPedal/>
+    <Physics>
+      <Lights />
+      <Grid />
+      <BossPedal />
+    </Physics>
   </>
 }
