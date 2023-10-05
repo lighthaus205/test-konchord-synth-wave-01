@@ -9,12 +9,20 @@ export default function Grid() {
   return <>
     <RigidBody>
       <mesh
-        rotation={[-Math.PI * 0.49, 0, 0]}
+        rotation={[-Math.PI * 0.5, 0, 0]}
+        scale={1}
       >
         <planeGeometry
-          args={[16, 8, 24, 24]}
+          args={[16, 16, 24, 24]}
         />
-        <meshStandardMaterial map={gridMap} />
+        <meshStandardMaterial
+          map={gridMap}
+          color={KOLORS.SPACE}
+          transparent={true}
+          opacity={1}
+          emissive={KOLORS.SPACE}
+          emissiveIntensity={2}
+        />
       </mesh>
     </RigidBody>
   </>
