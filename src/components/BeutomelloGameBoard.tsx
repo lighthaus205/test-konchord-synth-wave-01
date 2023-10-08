@@ -1,9 +1,10 @@
-import { RigidBody } from "@react-three/rapier"
+import { RigidBody, CuboidCollider } from "@react-three/rapier"
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { useLoader } from "@react-three/fiber"
 import * as THREE from 'three'
 import { useMemo } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
+
 
 const playingFieldElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
 const playingFieldElementMaterial = new THREE.MeshBasicMaterial({ color: 'red' })
@@ -100,6 +101,35 @@ function GameBoardElement({
   </>
 }
 
+function BeutomelloGameBoardWalls() {
+  return <>
+  <RigidBody type="fixed">
+      <CuboidCollider
+        args={[0.1, 2, 8]}
+        position={[8, 2, 0]}
+      />
+    </RigidBody>
+    <RigidBody type="fixed">
+      <CuboidCollider
+        args={[0.1, 2, 8]}
+        position={[-8, 2, 0]}
+      />
+    </RigidBody>
+    <RigidBody type="fixed">
+      <CuboidCollider
+        args={[8, 2, 0.1]}
+        position={[0, 2, 8]}
+      />
+    </RigidBody>
+    <RigidBody type="fixed">
+      <CuboidCollider
+        args={[8, 2, 0.1]}
+        position={[0, 2, -8]}
+      />
+    </RigidBody>
+    </>
+}
+
 
 export default function BeutomelloGameBoard() {
   const gridMap = useLoader(TextureLoader, 'beutomelloGameBoard.jpg')
@@ -126,6 +156,7 @@ export default function BeutomelloGameBoard() {
         />
       })
     })}
+    <BeutomelloGameBoardWalls />
     <RigidBody type="fixed">
       <mesh
         rotation={[-Math.PI * 0.5, 0, 0]}
