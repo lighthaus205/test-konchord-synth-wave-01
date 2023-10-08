@@ -101,30 +101,41 @@ function GameBoardElement({
   </>
 }
 
-function BeutomelloGameBoardWalls() {
+export function QuadraticWalls({
+  center = new THREE.Vector3(0, 0, 0),
+  height = 2,
+  thickness = 0.1,
+  length = 8,
+}: {
+  center?: THREE.Vector3
+  height?: number
+  thickness?: number
+  length?: number
+
+}) {
   return <>
   <RigidBody type="fixed">
       <CuboidCollider
-        args={[0.1, 2, 8]}
-        position={[8, 2, 0]}
+        args={[thickness, height, length]}
+        position={[center.x + length, center.y + height, center.z + 0]}
       />
     </RigidBody>
     <RigidBody type="fixed">
       <CuboidCollider
-        args={[0.1, 2, 8]}
-        position={[-8, 2, 0]}
+        args={[thickness, height, length]}
+        position={[center.x + -length, center.y + height, center.z + 0]}
       />
     </RigidBody>
     <RigidBody type="fixed">
       <CuboidCollider
-        args={[8, 2, 0.1]}
-        position={[0, 2, 8]}
+        args={[length, height, thickness]}
+        position={[center.x + 0, center.y + height, center.z + length]}
       />
     </RigidBody>
     <RigidBody type="fixed">
       <CuboidCollider
-        args={[8, 2, 0.1]}
-        position={[0, 2, -8]}
+        args={[length, height, thickness]}
+        position={[center.x + 0, center.y + height, center.z + -length]}
       />
     </RigidBody>
     </>
@@ -156,7 +167,7 @@ export default function BeutomelloGameBoard() {
         />
       })
     })}
-    <BeutomelloGameBoardWalls />
+    <QuadraticWalls />
     <RigidBody type="fixed">
       <mesh
         rotation={[-Math.PI * 0.5, 0, 0]}
