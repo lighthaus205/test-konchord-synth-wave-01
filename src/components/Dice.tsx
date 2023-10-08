@@ -2,8 +2,18 @@ import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { QuadraticWalls } from "./BeutomelloGameBoard";
 import * as THREE from 'three'
 import { useRef } from "react";
+import { useLoader } from "@react-three/fiber"
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+
 
 export default function Dice() {
+  const dice_texture_1 = useLoader(TextureLoader, 'dice_textures/1.jpg')
+  const dice_texture_2 = useLoader(TextureLoader, 'dice_textures/2.jpg')
+  const dice_texture_3 = useLoader(TextureLoader, 'dice_textures/3.jpg')
+  const dice_texture_4 = useLoader(TextureLoader, 'dice_textures/4.jpg')
+  const dice_texture_5 = useLoader(TextureLoader, 'dice_textures/5.jpg')
+  const dice_texture_6 = useLoader(TextureLoader, 'dice_textures/6.jpg')
+
   const diceRef = useRef<RapierRigidBody>(null!)
 
   const cubeJump = () => {
@@ -20,6 +30,10 @@ export default function Dice() {
       y: (Math.random() - 0.5) * diceMass * torqueFactor,
       z: (Math.random() - 0.) * diceMass * torqueFactor
     }, true)
+  }
+
+  const onDiceSleep = () => {
+    diceRef
   }
 
   const center = new THREE.Vector3(0, 0, -12)
@@ -44,17 +58,21 @@ export default function Dice() {
     </RigidBody>
     <RigidBody
       ref={diceRef}
+      onSleep={onDiceSleep}
     >
       <mesh
-        onClick={ cubeJump }
+        onClick={cubeJump}
         position={[center.x, center.y + 2, center.z]}
       >
         <boxGeometry
           args={[2, 2, 2]}
         />
-        <meshBasicMaterial
-          color={'green'}
-        />
+        <meshStandardMaterial map={dice_texture_1} />
+        <meshStandardMaterial map={dice_texture_2} />
+        <meshStandardMaterial map={dice_texture_3} />
+        <meshStandardMaterial map={dice_texture_4} />
+        <meshStandardMaterial map={dice_texture_5} />
+        <meshStandardMaterial map={dice_texture_6} />
       </mesh>
     </RigidBody>
   </>
