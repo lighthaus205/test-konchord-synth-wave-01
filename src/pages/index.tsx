@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Canvas } from '@react-three/fiber'
 import Experience from "~/components/Experience";
 import { OrbitControls, KeyboardControls } from '@react-three/drei'
+import BeutomelloExperience from "~/components/BeutomelloExperience";
 
 
 export default function Home() {
@@ -28,11 +29,11 @@ export default function Home() {
               fov: 75,
               near: 0.01,
               far: 200,
-              position: [0, 2, 4]
+              position: [0, 16, 0]
             }}
           >
             <OrbitControls />
-            <Experience />
+            <BeutomelloExperience />
           </Canvas>
         </KeyboardControls>
       </main>
