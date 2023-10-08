@@ -3,33 +3,7 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { useLoader } from "@react-three/fiber"
 import * as THREE from 'three'
 import { useMemo } from "react"
-
-// const heartShape = new THREE.Shape()
-// const x = -4.8, y = -5.8
-// heartShape.moveTo(x, y)
-// heartShape.lineTo(x + 0.8, y + 0.3)
-// heartShape.lineTo(x + 0.1, y + 1)
-// heartShape.lineTo(x + -0.5, y + 0.45)
-
-enum PlayerEnum {
-  player1 = 'player1',
-  player2 = 'player2',
-  player3 = 'player3',
-  player4 = 'player4'
-}
-
-enum GameBoardElementKeyEnum {
-  One = 1,
-  Two = 2,
-  Three = 3,
-  Four = 4,
-  Five = 5,
-  Six = 6,
-  Seven = 7,
-  Eight = 8,
-  Nine = 9,
-  Ten = 10,
-}
+import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 
 const playingFieldElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
 const playingFieldElementMaterial = new THREE.MeshBasicMaterial({ color: 'red' })
