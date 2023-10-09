@@ -3,12 +3,15 @@ import * as THREE from 'three'
 import { useRef } from "react"
 import useBeutomelloGame from "~/stores/useBeutomelloGame"
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
+import { useThree } from '@react-three/fiber'
+
 
 export default function Player() {
   const currentPlayer = PlayerEnum.player1
   const currentMeeple = MeepleEnum.meeple1
   const playerRef = useRef<RapierRigidBody>(null!)
   const playerMeshRef = useRef<THREE.Mesh>(null!)
+  const state = useThree()
 
   const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
   const updateBeutomelloGameState = useBeutomelloGame((state) => state.updateBeutomelloGameState)
@@ -16,10 +19,11 @@ export default function Player() {
 
   const playerJump = () => {
     console.log('playerJump...');
-    console.log('(1)', beutomelloGameState[currentPlayer][currentMeeple])
     updateBeutomelloGameState(currentPlayer, currentMeeple, GameBoardElementKeyEnum.One)
-    console.log('(2)', beutomelloGameState[currentPlayer][currentMeeple])
-    console.log()
+    const gameBoardElementKey = beutomelloGameState[currentPlayer][currentMeeple]
+    const gameBoardElementName = `${currentPlayer}_gameBoardElement${gameBoardElementKey}`
+    const gameBoardElement = state.scene.getObjectByName(gameBoardElementName)
+    console.log(gameBoardElement?.position)
   }
 
   const onPlayerSleep = () => {

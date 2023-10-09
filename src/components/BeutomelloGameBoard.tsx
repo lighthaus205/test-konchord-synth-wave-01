@@ -6,10 +6,10 @@ import { useMemo, useRef, RefObject, Ref } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 import { QuadraticWalls } from "./RigidBodyHelpers"
 
-const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
+const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0, 0.6)
 const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
   color: 'darkblue',
-  opacity: 1,
+  opacity: 0,
   transparent: true
 })
 
@@ -66,10 +66,12 @@ const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]:
 
 function GameBoardElement({
   player,
+  name,
   gameBoardElementKey,
 }: {
   player: PlayerEnum,
   gameBoardElementKey: GameBoardElementKeyEnum
+  name: string
 }
 ) {
   let yRotation = 0;
@@ -88,10 +90,11 @@ function GameBoardElement({
 
   return <>
     <mesh
+      name={name}
       rotation={[0, yRotation, 0]}
       position={[
         gameBoardProps[player][gameBoardElementKey].x,
-        0.02,
+        0,
         gameBoardProps[player][gameBoardElementKey].z
       ]}
       geometry={GameBoardElementGeometry}
@@ -121,7 +124,8 @@ export default function BeutomelloGameBoard() {
     {players.map((player, playerIndex) => {
       return boardElementKeys.map((boardElementKey, boardElementKeyIndex) => {
         return <GameBoardElement
-          key={`player${playerIndex + 1}_boardElement${boardElementKeyIndex + 1}`}
+          name={`${player}_gameBoardElement${boardElementKey}`}
+          key={`${player}_gameBoardElement${boardElementKey}`}
           player={player}
           gameBoardElementKey={boardElementKey}
         />
