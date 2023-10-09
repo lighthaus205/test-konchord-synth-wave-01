@@ -1,0 +1,494 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1105,
+      "max": [
+        122.40914916992188,
+        122.40914916992188,
+        17.265625
+      ],
+      "min": [
+        -122.40914916992188,
+        -122.40914154052734,
+        -2.265625
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 13260,
+      "componentType": 5126,
+      "count": 1105,
+      "max": [
+        1.0,
+        1.0,
+        0.9966899156570435
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -0.9966899156570435
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1105,
+      "max": [
+        0.8563651442527771,
+        0.9417040348052979
+      ],
+      "min": [
+        0.13123780488967896,
+        0.05829596519470215
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 6144,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 26520,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        116.5623779296875,
+        116.56237030029297,
+        -0.9375
+      ],
+      "min": [
+        -116.56237030029297,
+        -116.56236267089844,
+        -0.9375
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 27288,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.6312317848205566,
+        0.6312246918678284,
+        -0.7755905985832214
+      ],
+      "min": [
+        -0.6312323808670044,
+        -0.6312318444252014,
+        -0.7756441235542297
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.999908447265625,
+        0.20792965590953827,
+        0.6310722827911377,
+        1.0
+      ],
+      "min": [
+        0.7753974795341492,
+        -0.23950020968914032,
+        -0.6310725808143616,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 8840,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.9599999189376831,
+        0.959999680519104
+      ],
+      "min": [
+        0.040000226348638535,
+        0.040000155568122864
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 24576,
+      "componentType": 5125,
+      "count": 186,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 28056,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        116.56237030029297,
+        116.56237030029297,
+        15.9375
+      ],
+      "min": [
+        -116.56237030029297,
+        -116.56236267089844,
+        15.9375
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 28824,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.6312317848205566,
+        0.6312248110771179,
+        0.7756433486938477
+      ],
+      "min": [
+        -0.6312249898910522,
+        -0.631231963634491,
+        0.7755907773971558
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 1024,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.9985325932502747,
+        0.16251380741596222,
+        0.6307525634765625,
+        1.0
+      ],
+      "min": [
+        0.7724610567092896,
+        -0.28526946902275085,
+        -0.6307532787322998,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9352,
+      "componentType": 5126,
+      "count": 64,
+      "max": [
+        0.9598795175552368,
+        0.9598795175552368
+      ],
+      "min": [
+        0.04012054204940796,
+        0.04012056812644005
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 25320,
+      "componentType": 5125,
+      "count": 186,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Anthony Yanez (https://sketchfab.com/paulyanez)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/penny-coin-297daf2b48f24b228db4a793e6156a18",
+      "title": "Penny (Coin)"
+    },
+    "generator": "Sketchfab-12.66.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 26064,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 9864,
+      "byteOffset": 26064,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 29592,
+      "byteOffset": 35928,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2048,
+      "byteOffset": 65520,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 67568,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/03_-_Default_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/02_-_Default_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/02_-_Default_normal.png"
+    },
+    {
+      "uri": "textures/01_-_Default_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/01_-_Default_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "03_-_Default",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.8685089574,
+        "roughnessFactor": 0.11330922440000002
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "02_-_Default",
+      "normalTexture": {
+        "index": 2
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.1594180483,
+        "roughnessFactor": 0.2890668002
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "01_-_Default",
+      "normalTexture": {
+        "index": 4,
+        "scale": 0.1594180483
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "roughnessFactor": 0.9133092244466146
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Penny_03 - Default_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Penny_02 - Default_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TANGENT": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 8,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Penny_01 - Default_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 10,
+            "POSITION": 9,
+            "TANGENT": 11,
+            "TEXCOORD_0": 12
+          },
+          "indices": 13,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Penny.FBX"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5,
+        6
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9999999999999867,
+        1.6292067961387528e-07,
+        0.0,
+        0.0,
+        -6.616902232344083e-08,
+        0.406142562627787,
+        0.0,
+        -10.964037895202637,
+        24.162616729736328,
+        4.45393180847168,
+        1.0
+      ],
+      "name": "Penny"
+    },
+    {
+      "mesh": 0,
+      "name": "Penny_03 - Default_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Penny_02 - Default_0"
+    },
+    {
+      "mesh": 2,
+      "name": "Penny_01 - Default_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    }
+  ]
+}
