@@ -50,7 +50,7 @@ export default function Player() {
         <cylinderGeometry
           args={[0.15, 0.2, 0.8, 24]}
         />
-        <meshBasicMaterial
+        <meshStandardMaterial
           color={'blue'}
         />
       </mesh>
