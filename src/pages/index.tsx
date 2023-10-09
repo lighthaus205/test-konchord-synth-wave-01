@@ -32,7 +32,10 @@ export default function Home() {
               position: [0, 8, 12]
             }}
           >
-            <OrbitControls />
+            <OrbitControls
+              // minPolarAngle={Math.PI / 6}
+              maxPolarAngle={Math.PI / 2 - Math.PI / 8}
+            />
             <BeutomelloExperience />
           </Canvas>
         </KeyboardControls>
