@@ -4,7 +4,7 @@ import { useLoader } from "@react-three/fiber"
 import * as THREE from 'three'
 import { useMemo } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
-
+import { QuadraticWalls } from "./RigidBodyHelpers"
 
 const playingFieldElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
 const playingFieldElementMaterial = new THREE.MeshBasicMaterial({ color: 'red' })
@@ -99,46 +99,6 @@ function GameBoardElement({
       </mesh>
     </RigidBody>
   </>
-}
-
-export function QuadraticWalls({
-  center = new THREE.Vector3(0, 0, 0),
-  height = 2,
-  thickness = 0.1,
-  length = 8,
-}: {
-  center?: THREE.Vector3
-  height?: number
-  thickness?: number
-  length?: number
-
-}) {
-  return <>
-  <RigidBody type="fixed">
-      <CuboidCollider
-        args={[thickness, height, length]}
-        position={[center.x + length, center.y + height, center.z + 0]}
-      />
-    </RigidBody>
-    <RigidBody type="fixed">
-      <CuboidCollider
-        args={[thickness, height, length]}
-        position={[center.x + -length, center.y + height, center.z + 0]}
-      />
-    </RigidBody>
-    <RigidBody type="fixed">
-      <CuboidCollider
-        args={[length, height, thickness]}
-        position={[center.x + 0, center.y + height, center.z + length]}
-      />
-    </RigidBody>
-    <RigidBody type="fixed">
-      <CuboidCollider
-        args={[length, height, thickness]}
-        position={[center.x + 0, center.y + height, center.z + -length]}
-      />
-    </RigidBody>
-    </>
 }
 
 

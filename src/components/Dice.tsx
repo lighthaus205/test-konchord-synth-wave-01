@@ -1,5 +1,5 @@
-import { CuboidCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { QuadraticWalls } from "./BeutomelloGameBoard";
+import { RapierRigidBody, RigidBody } from "@react-three/rapier";
+import { CuboidColliderBox } from "./RigidBodyHelpers";
 import * as THREE from 'three'
 import { useRef } from "react";
 import { useLoader } from "@react-three/fiber"
@@ -17,7 +17,7 @@ export default function Dice() {
   const diceRef = useRef<RapierRigidBody>(null!)
   const diceMeshRef = useRef<THREE.Mesh>(null!)
 
-  const cubeJump = () => {
+  const cubeJump = () => {    
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3
     const torqueFactor = 10
@@ -116,20 +116,13 @@ export default function Dice() {
     }
   }
 
-  const center = new THREE.Vector3(0, 0, -12)
-  const length = 4
+  const center = new THREE.Vector3(-4, 0, -12)
   return <>
-    <QuadraticWalls
+    <CuboidColliderBox
       center={center}
-      length={length}
-      height={10}
+      height={5}
+      length={4}
     />
-    <RigidBody type="fixed">
-      <CuboidCollider
-        args={[4, 0.1, 4]}
-        position={[center.x, center.y, center.z]}
-      />
-    </RigidBody>
     <RigidBody
       ref={diceRef}
       onSleep={onDiceSleep}
