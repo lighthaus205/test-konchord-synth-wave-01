@@ -19,21 +19,29 @@ export default function Player() {
 
   const playerJump = () => {
     console.log('playerJump...');
-    updateBeutomelloGameState(currentPlayer, currentMeeple, GameBoardElementKeyEnum.One)
-    const gameBoardElementKey = beutomelloGameState[currentPlayer][currentMeeple]
-    const gameBoardElementName = `${currentPlayer}_gameBoardElement${gameBoardElementKey}`
+    const currentGameBoardElementKey = beutomelloGameState[currentPlayer][currentMeeple]
+    const newGameBoardElementKey = currentGameBoardElementKey === GameBoardElementKeyEnum.One ? GameBoardElementKeyEnum.Two : GameBoardElementKeyEnum.One
+    updateBeutomelloGameState(currentPlayer, currentMeeple, newGameBoardElementKey)
+    const gameBoardElementName = `${currentPlayer}_gameBoardElement${newGameBoardElementKey}`
     const gameBoardElement = state.scene.getObjectByName(gameBoardElementName)
-    console.log(gameBoardElement?.position)
+    if (gameBoardElement?.position) {
+      playerMeshRef.current.position.set(
+        gameBoardElement?.position.x,
+        gameBoardElement?.position.y,
+        gameBoardElement?.position.z
+      )
+    }
+
   }
 
   const onPlayerSleep = () => {
     console.log('onPlayerSleep...')
   }
   return <>
-  <RigidBody
-    ref={playerRef}
-    onSleep={onPlayerSleep}
-  >
+    <RigidBody
+      ref={playerRef}
+      onSleep={onPlayerSleep}
+    >
       <mesh
         ref={playerMeshRef}
         position={[-6, 0, 6]}
