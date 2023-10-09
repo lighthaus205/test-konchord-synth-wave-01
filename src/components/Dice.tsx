@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { useRef } from "react";
 import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
 
 
 export default function Dice() {
@@ -17,7 +18,8 @@ export default function Dice() {
   const diceRef = useRef<RapierRigidBody>(null!)
   const diceMeshRef = useRef<THREE.Mesh>(null!)
 
-  const cubeJump = () => {    
+  const cubeJump = () => {
+    console.log('cubeJump...');
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3
     const torqueFactor = 10
@@ -34,18 +36,13 @@ export default function Dice() {
   }
 
   const onDiceSleep = () => {
+    console.log('onDiceSleep...');
     const euler = new THREE.Euler()
     if (diceMeshRef.current.parent?.quaternion) {
       euler.setFromQuaternion(
         diceMeshRef.current.parent?.quaternion
       )
     }
-
-    const eps = 0.1;
-    let isZero = (angle: number) => Math.abs(angle) < eps;
-    let isHalfPi = (angle: number) => Math.abs(angle - .5 * Math.PI) < eps;
-    let isMinusHalfPi = (angle: number) => Math.abs(.5 * Math.PI + angle) < eps;
-    let isPiOrMinusPi = (angle: number) => (Math.abs(Math.PI - angle) < eps || Math.abs(Math.PI + angle) < eps);
 
     // console.log('euler.x', euler.x);
     // console.log('isZero(euler.x)', isZero(euler.x))
@@ -126,11 +123,11 @@ export default function Dice() {
     <RigidBody
       ref={diceRef}
       onSleep={onDiceSleep}
+      position={[center.x, center.y + 2, center.z]}
     >
       <mesh
         ref={diceMeshRef}
         onClick={cubeJump}
-        position={[center.x, center.y + 2, center.z]}
       >
         <boxGeometry
           args={[1.5, 1.5, 1.5]}
