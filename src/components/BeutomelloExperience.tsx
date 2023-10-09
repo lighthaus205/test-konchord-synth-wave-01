@@ -7,7 +7,7 @@ import Coin from "./Coin"
 
 export default function BeutomelloExperience() {
   return <>
-    <Physics debug>
+    <Physics>
       <Lights />
       <BeutomelloGameBoard />
       <Player />
