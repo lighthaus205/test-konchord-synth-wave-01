@@ -3,13 +3,7 @@ import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum } from '~/utils/enums'
 
 interface BeutomelloGameState {
   beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum | undefined } }
-  blocksCount: number
-  blocksSeed: number
-  startTime: number
-  phase: string
   updateBeutomelloGameState: Function
-  restart: Function
-  end: Function
 }
 
 export default create<BeutomelloGameState>((set) => {
@@ -40,17 +34,6 @@ export default create<BeutomelloGameState>((set) => {
         [MeepleEnum.meeple4]: undefined
       },
     },
-    blocksCount: 10,
-    blocksSeed: 0,
-    /**
-     * Time
-     */
-    startTime: 0,
-    endTime: 0,
-    /**
-     * Phases
-     */
-    phase: 'ready',
     updateBeutomelloGameState: (
       player: PlayerEnum,
       meeple: MeepleEnum,
@@ -62,21 +45,5 @@ export default create<BeutomelloGameState>((set) => {
         return {beutomelloGameState}
       })
     },
-    restart: () => {
-      set((state) => {
-        if (state.phase === 'playing' || state.phase === 'ended') {
-          return { phase: 'ready', blockSeed: Math.random() }
-        }
-        return {}
-      })
-    },
-    end: () => {
-      set((state) => {
-        if (state.phase === 'playing') {
-          return { phase: 'ended', endTime: Date.now() }
-        }
-        return {}
-      })
-    }
   }
 })

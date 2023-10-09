@@ -19,6 +19,7 @@ export default function Player() {
     console.log('(1)', beutomelloGameState[currentPlayer][currentMeeple])
     updateBeutomelloGameState(currentPlayer, currentMeeple, GameBoardElementKeyEnum.One)
     console.log('(2)', beutomelloGameState[currentPlayer][currentMeeple])
+    console.log()
   }
 
   const onPlayerSleep = () => {
