@@ -6,8 +6,12 @@ import { useMemo } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 import { QuadraticWalls } from "./RigidBodyHelpers"
 
-const playingFieldElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
-const playingFieldElementMaterial = new THREE.MeshBasicMaterial({ color: 'red' })
+const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0.01, 0.6)
+const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
+  color: 'darkblue',
+  opacity: 0,
+  transparent: true
+})
 
 function GameBoardElement({
   player,
@@ -85,19 +89,17 @@ function GameBoardElement({
     yRotation = Math.PI / 4
   }
   return <>
-    <RigidBody type="fixed">
-      <mesh
-        rotation={[0, yRotation, 0]}
-        position={[
-          xzPositions[player][gameBoardElementKey].x,
-          0.02,
-          xzPositions[player][gameBoardElementKey].z
-        ]}
-        geometry={playingFieldElementGeometry}
-        material={playingFieldElementMaterial}
-      >
-      </mesh>
-    </RigidBody>
+    <mesh
+      rotation={[0, yRotation, 0]}
+      position={[
+        xzPositions[player][gameBoardElementKey].x,
+        0.02,
+        xzPositions[player][gameBoardElementKey].z
+      ]}
+      geometry={GameBoardElementGeometry}
+      material={GameBoardElementMaterial}
+    >
+    </mesh>
   </>
 }
 

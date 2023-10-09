@@ -33,7 +33,7 @@ export default function Dice() {
   }
 
   const onCoinSleep = () => {
-    console.log('coin sleep');
+    console.log('onCoinSleep...');
     const euler = new THREE.Euler()
     if (coinMeshRef.current.parent?.quaternion) {
       euler.setFromQuaternion(
