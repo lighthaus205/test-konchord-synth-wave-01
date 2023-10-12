@@ -6,6 +6,7 @@ import { useMemo, useRef, RefObject, Ref } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 import { QuadraticWalls } from "./RigidBodyHelpers"
 import { Float, Text } from '@react-three/drei'
+import useBeutomelloGame from "~/stores/useBeutomelloGame"
 
 
 const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0, 0.6)
@@ -91,27 +92,28 @@ function PlayerText({
 }: {
   player: PlayerEnum
 }) {
+  const playerDisplayNames = useBeutomelloGame((state) => state.playerDisplayNames)
   const playerTextConfig = {
     [PlayerEnum.player1]: {
-      displayName: 'Heiko',
+      displayName: playerDisplayNames[player as PlayerEnum],
       positionX: -8.5,
       positionZ: 8.5,
       rotationZ: Math.PI / -4
     },
     [PlayerEnum.player2]: {
-      displayName: 'Konchord',
+      displayName: playerDisplayNames[player as PlayerEnum],
       positionX: -8.5,
       positionZ: -8.5,
       rotationZ: Math.PI / 4 + Math.PI
     },
     [PlayerEnum.player3]: {
-      displayName: 'Player 3',
+      displayName: playerDisplayNames[player as PlayerEnum],
       positionX: 8.5,
       positionZ: -8.5,
       rotationZ: Math.PI / -4 + Math.PI
     },
     [PlayerEnum.player4]: {
-      displayName: 'Player 4',
+      displayName: playerDisplayNames[player as PlayerEnum],
       positionX: 8.5,
       positionZ: 8.5,
       rotationZ: Math.PI / 4

@@ -19,6 +19,7 @@ interface BeutomelloGameState {
   setGamePhase: Function
   displayTextInInterface: string
   setDisplayTextInInterface: Function
+  playerDisplayNames: { [key in PlayerEnum]: string }
 }
 
 const playerInitState = {
@@ -65,6 +66,12 @@ export default create<BeutomelloGameState>((set) => {
       [PlayerEnum.player2]: {...playerInitState},
       [PlayerEnum.player3]: {...playerInitState},
       [PlayerEnum.player4]: {...playerInitState},
+    },
+    playerDisplayNames: {
+      [PlayerEnum.player1]: 'Heiko',
+      [PlayerEnum.player2]: 'Konchord',
+      [PlayerEnum.player3]: 'Player 3',
+      [PlayerEnum.player4]: 'Player 4',
     },
     setDiceWasThrown: (
       wasThrown: boolean,
