@@ -5,9 +5,13 @@ import { useRef } from "react";
 import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
+import useBeutomelloGame from "~/stores/useBeutomelloGame";
+import { useThree } from '@react-three/fiber'
 
 
 export default function Dice() {
+  const threeState = useThree()
+
   const dice_texture_1 = useLoader(TextureLoader, 'dice_textures/1.jpg')
   const dice_texture_2 = useLoader(TextureLoader, 'dice_textures/2.jpg')
   const dice_texture_3 = useLoader(TextureLoader, 'dice_textures/3.jpg')
@@ -17,9 +21,13 @@ export default function Dice() {
 
   const diceRef = useRef<RapierRigidBody>(null!)
   const diceMeshRef = useRef<THREE.Mesh>(null!)
+  const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
+  const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
+  // const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
 
   const cubeJump = () => {
     console.log('cubeJump...');
+    setDiceWasThrown(true)
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3
     const torqueFactor = 10
@@ -44,39 +52,40 @@ export default function Dice() {
       )
     }
 
-    // console.log('euler.x', euler.x);
-    // console.log('isZero(euler.x)', isZero(euler.x))
-    // console.log('isHalfPi(euler.x)', isHalfPi(euler.x))
-    // console.log('isMinusHalfPi(euler.x)', isMinusHalfPi(euler.x))
-    // console.log('isPiOrMinusPi(euler.x)', isPiOrMinusPi(euler.x))
-    // console.log('---')
-    // console.log('euler.y', euler.y);
-    // console.log('isZero(euler.y)', isZero(euler.y))
-    // console.log('isHalfPi(euler.y)', isHalfPi(euler.y))
-    // console.log('isMinusHalfPi(euler.y)', isMinusHalfPi(euler.y))
-    // console.log('isPiOrMinusPi(euler.y)', isPiOrMinusPi(euler.y))
-    // console.log('---')
-    // console.log('euler.z', euler.z);
-    // console.log('isZero(euler.z)', isZero(euler.z))
-    // console.log('isHalfPi(euler.z)', isHalfPi(euler.z))
-    // console.log('isMinusHalfPi(euler.z)', isMinusHalfPi(euler.z))
-    // console.log('isPiOrMinusPi(euler.z)', isPiOrMinusPi(euler.z))
+    console.log('euler.x', euler.x);
+    console.log('isZero(euler.x)', isZero(euler.x))
+    console.log('isHalfPi(euler.x)', isHalfPi(euler.x))
+    console.log('isMinusHalfPi(euler.x)', isMinusHalfPi(euler.x))
+    console.log('isPiOrMinusPi(euler.x)', isPiOrMinusPi(euler.x))
+    console.log('---')
+    console.log('euler.y', euler.y);
+    console.log('isZero(euler.y)', isZero(euler.y))
+    console.log('isHalfPi(euler.y)', isHalfPi(euler.y))
+    console.log('isMinusHalfPi(euler.y)', isMinusHalfPi(euler.y))
+    console.log('isPiOrMinusPi(euler.y)', isPiOrMinusPi(euler.y))
+    console.log('---')
+    console.log('euler.z', euler.z);
+    console.log('isZero(euler.z)', isZero(euler.z))
+    console.log('isHalfPi(euler.z)', isHalfPi(euler.z))
+    console.log('isMinusHalfPi(euler.z)', isMinusHalfPi(euler.z))
+    console.log('isPiOrMinusPi(euler.z)', isPiOrMinusPi(euler.z))
 
+    let diceResult
     if (isZero(euler.x)) {
       if (isZero(euler.z)) {
-        console.log('1')
+        diceResult = 1
       } else if (isHalfPi(euler.z)) {
-        console.log('2')
+        diceResult = 2
       } else if (isMinusHalfPi(euler.z)) {
-        console.log('5')
+        diceResult = 5
       } else if (isPiOrMinusPi(euler.z)) {
-        console.log('6')
+        diceResult = 6
       } else {
         console.log('landed on edge')
       }
     } else if (isHalfPi(euler.x)) {
       if (isZero(euler.y)) {
-        console.log('4')
+        diceResult = 4
       } else if (isHalfPi(euler.y)) {
         console.log('not implemented')
       } else if (isMinusHalfPi(euler.y)) {
@@ -88,7 +97,7 @@ export default function Dice() {
       }
     } else if (isMinusHalfPi(euler.x)) {
       if (isZero(euler.y)) {
-        console.log('3')
+        diceResult = 3
       } else if (isHalfPi(euler.y)) {
         console.log('not implemented')
       } else if (isMinusHalfPi(euler.y)) {
@@ -100,16 +109,23 @@ export default function Dice() {
       }
     } else if (isPiOrMinusPi(euler.x)) {
       if (isZero(euler.z)) {
-        console.log('6')
+        diceResult = 6
       } else if (isHalfPi(euler.z)) {
-        console.log('5')
+        diceResult = 5
       } else if (isMinusHalfPi(euler.z)) {
-        console.log('2')
+        diceResult = 2
       } else if (isPiOrMinusPi(euler.z)) {
-        console.log('1')
+        diceResult = 1
       } else {
         console.log('landed on edge')
       }
+    }
+    if (diceResult) {
+      console.log('Move meeple ' + diceResult + ' steps')
+      moveCurrentMeeple(diceResult, threeState)
+      setDiceWasThrown(false)
+    } else {
+      console.error('Unknown dice result!')
     }
   }
 
