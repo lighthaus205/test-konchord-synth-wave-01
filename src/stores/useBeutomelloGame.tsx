@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum, GamePhaseEnum } from '~/utils/enums'
 import * as THREE from 'three'
+import { useFrame } from '@react-three/fiber'
+
 
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
@@ -20,6 +22,9 @@ interface BeutomelloGameState {
   displayTextInInterface: string
   setDisplayTextInInterface: Function
   playerDisplayNames: { [key in PlayerEnum]: string }
+  // moveMeepleOneStep: Function
+  moveMeepleCurve: THREE.CatmullRomCurve3
+  setMoveMeepleCurve: Function
 }
 
 const playerInitState = {
@@ -61,14 +66,15 @@ export default create<BeutomelloGameState>((set) => {
     coinPosition: new THREE.Vector3(-9, 0, 6),
     gamePhase: GamePhaseEnum.init,
     displayTextInInterface: '',
+    moveMeepleCurve: new THREE.CatmullRomCurve3(),
     beutomelloGameState: {
-      [PlayerEnum.player1]: {...playerInitState},
-      [PlayerEnum.player2]: {...playerInitState},
-      [PlayerEnum.player3]: {...playerInitState},
-      [PlayerEnum.player4]: {...playerInitState},
+      [PlayerEnum.player1]: { ...playerInitState },
+      [PlayerEnum.player2]: { ...playerInitState },
+      [PlayerEnum.player3]: { ...playerInitState },
+      [PlayerEnum.player4]: { ...playerInitState },
     },
     playerDisplayNames: {
-      [PlayerEnum.player1]: 'Heiko',
+      [PlayerEnum.player1]: 'Beutomello',
       [PlayerEnum.player2]: 'Konchord',
       [PlayerEnum.player3]: 'Player 3',
       [PlayerEnum.player4]: 'Player 4',
@@ -85,14 +91,20 @@ export default create<BeutomelloGameState>((set) => {
       threeState: any
     ) => {
       set((state) => {
+        /**
+         * Only take action if the dice was thrown
+         */
         if (state.diceWasThrown) {
           /**
-           * Get gameBoardElementTarget
+           * Only take action if the currentMeeple has been set
            */
           if (!state.currentMeeple) {
             return {}
           }
 
+          /**
+         * Get gameBoardElementTarget
+         */
           const beutomelloGameState = state.beutomelloGameState
           const target = beutomelloGameState[state.currentPlayer][state.currentMeeple] + steps
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
@@ -102,21 +114,30 @@ export default create<BeutomelloGameState>((set) => {
            */
           const gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
+          const gameBoardElementPosition = new THREE.Vector3(
+            gameBoardElement.position.x,
+            gameBoardElement.position.y + 0.4,
+            gameBoardElement.position.z
+          )
           const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
           const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
-          
-          /**
-           * Move meeple
-           */
-          if (gameBoardElement?.position) {
-            meepleObject.position.set(
-              gameBoardElement?.position.x,
-              0.4,
-              gameBoardElement?.position.z
-            )
-          }
-          state.nextPlayer()
-          return { beutomelloGameState }
+
+          const midpoint = new THREE.Vector3();
+          midpoint.addVectors(meepleObject.position, gameBoardElementPosition).divideScalar(2);
+          midpoint.y = 2
+
+          // Create a CatmullRomCurve3
+          const moveMeepleCurve = new THREE.CatmullRomCurve3([
+            new THREE.Vector3().copy(meepleObject.position), // Start point
+            new THREE.Vector3().copy(midpoint), // Middle point
+            new THREE.Vector3().copy(gameBoardElementPosition)  // End point
+          ]);
+
+          setTimeout(() => {
+            state.nextPlayer()
+          }, 2500)
+
+          return { beutomelloGameState, moveMeepleCurve }
         }
         return {}
       })
@@ -147,7 +168,7 @@ export default create<BeutomelloGameState>((set) => {
         setTimeout(() => {
           state.setGamePhase(GamePhaseEnum.selectMeeple)
         }, 1000)
-        
+
         return { currentMeeple: undefined }
       })
     },
@@ -170,6 +191,13 @@ export default create<BeutomelloGameState>((set) => {
     ) => {
       set((state) => {
         return { displayTextInInterface }
+      })
+    },
+    setMoveMeepleCurve: (
+      moveMeepleCurve: THREE.CatmullRomCurve3
+    ) => {
+      set((state) => {
+        return { moveMeepleCurve }
       })
     },
   }

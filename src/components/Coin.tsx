@@ -99,7 +99,7 @@ export default function Dice() {
       <RigidBody
         ref={coinRef}
         onSleep={onCoinSleep}
-        scale={0.01}
+        scale={0.007}
         position={[0, 1, 0]}
         rotation={[Math.PI / 2, 0, 0]}
       >
