@@ -32,7 +32,7 @@ function Meeple({
       name={`${player}_${meeple}`}
       position={[
         player === PlayerEnum.player2 || player === PlayerEnum.player1 ? -positionX : positionX,
-        0,
+        0.4,
         player === PlayerEnum.player3 || player === PlayerEnum.player2 ? -positionZ : positionZ,
       ]}
     >
@@ -47,9 +47,6 @@ function Meeple({
 }
 
 export default function Player() {
-
-  const playerRef = useRef<RapierRigidBody>(null!)
-
   return <>
     {Object.keys(meepleProps).map((player, playerIndex) => {
       return Object.keys(meepleProps[player as PlayerEnum].meeplePostions).map((meeple, meepleIndex) => {
