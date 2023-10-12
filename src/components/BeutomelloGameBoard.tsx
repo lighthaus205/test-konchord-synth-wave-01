@@ -13,59 +13,25 @@ const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
   transparent: true
 })
 
+const initialPositions = {
+  0: { x: 6, z: 6},
+  1: { x: 5.05, z: 5.05 },
+  2: { x: 4.55, z: 4.55 },
+  3: { x: 4.1, z: 4.1 },
+  4: { x: 3.65, z: 3.65 },
+  5: { x: 3.15, z: 3.15 },
+  6: { x: 2.7, z: 2.7 },
+  7: { x: 2.25, z: 2.25 },
+  8: { x: 1.8, z: 1.8 },
+  9: { x: 1.4, z: 1.4 },
+  10: { x: 0.95, z: 0.95 },
+}
+
 const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]: { x: number, z: number } } } = {
-  [PlayerEnum.player1]: {
-    0: { x: -6, z: 6},
-    1: { x: -5.05, z: 5.05 },
-    2: { x: -4.55, z: 4.55 },
-    3: { x: -4.1, z: 4.1 },
-    4: { x: -3.65, z: 3.65 },
-    5: { x: -3.15, z: 3.15 },
-    6: { x: -2.7, z: 2.7 },
-    7: { x: -2.25, z: 2.25 },
-    8: { x: -1.8, z: 1.8 },
-    9: { x: -1.4, z: 1.4 },
-    10: { x: -0.95, z: 0.95 },
-  },
-  [PlayerEnum.player2]: {
-    0: { x: -6, z: -6},
-    1: { x: -5.05, z: -5.05 },
-    2: { x: -4.55, z: -4.55 },
-    3: { x: -4.1, z: -4.1 },
-    4: { x: -3.65, z: -3.65 },
-    5: { x: -3.15, z: -3.15 },
-    6: { x: -2.7, z: -2.7 },
-    7: { x: -2.25, z: -2.25 },
-    8: { x: -1.8, z: -1.8 },
-    9: { x: -1.4, z: -1.4 },
-    10: { x: -0.95, z: -0.95 },
-  },
-  [PlayerEnum.player3]: {
-    0: { x: 6, z: -6},
-    1: { x: 5.05, z: -5.05 },
-    2: { x: 4.55, z: -4.55 },
-    3: { x: 4.1, z: -4.1 },
-    4: { x: 3.65, z: -3.65 },
-    5: { x: 3.15, z: -3.15 },
-    6: { x: 2.7, z: -2.7 },
-    7: { x: 2.25, z: -2.25 },
-    8: { x: 1.8, z: -1.8 },
-    9: { x: 1.4, z: -1.4 },
-    10: { x: 0.95, z: -0.95 },
-  },
-  [PlayerEnum.player4]: {
-    0: { x: 6, z: 6},
-    1: { x: 5.05, z: 5.05 },
-    2: { x: 4.55, z: 4.55 },
-    3: { x: 4.1, z: 4.1 },
-    4: { x: 3.65, z: 3.65 },
-    5: { x: 3.15, z: 3.15 },
-    6: { x: 2.7, z: 2.7 },
-    7: { x: 2.25, z: 2.25 },
-    8: { x: 1.8, z: 1.8 },
-    9: { x: 1.4, z: 1.4 },
-    10: { x: 0.95, z: 0.95 },
-  }
+  [PlayerEnum.player1]: initialPositions,
+  [PlayerEnum.player2]: initialPositions,
+  [PlayerEnum.player3]: initialPositions,
+  [PlayerEnum.player4]: initialPositions
 }
 
 function GameBoardElement({
@@ -78,18 +44,28 @@ function GameBoardElement({
   name: string
 }
 ) {
-  let yRotation = 0;
+  let yRotation = 0
+  let xPosition = 0
+  let zPosition = 0
   if (player === PlayerEnum.player1) {
     yRotation = Math.PI / -4
+    xPosition = -gameBoardProps[player][gameBoardElementKey].x
+    zPosition = gameBoardProps[player][gameBoardElementKey].z
   }
   if (player === PlayerEnum.player2) {
     yRotation = Math.PI / 4
+    xPosition = -gameBoardProps[player][gameBoardElementKey].x
+    zPosition = -gameBoardProps[player][gameBoardElementKey].z
   }
   if (player === PlayerEnum.player3) {
     yRotation = Math.PI / -4
+    xPosition = gameBoardProps[player][gameBoardElementKey].x
+    zPosition = -gameBoardProps[player][gameBoardElementKey].z
   }
   if (player === PlayerEnum.player4) {
     yRotation = Math.PI / 4
+    xPosition = gameBoardProps[player][gameBoardElementKey].x
+    zPosition = gameBoardProps[player][gameBoardElementKey].z
   }
 
   return <>
@@ -97,9 +73,9 @@ function GameBoardElement({
       name={name}
       rotation={[0, yRotation, 0]}
       position={[
-        gameBoardProps[player][gameBoardElementKey].x,
+        xPosition,
         0,
-        gameBoardProps[player][gameBoardElementKey].z
+        zPosition
       ]}
       geometry={GameBoardElementGeometry}
       material={GameBoardElementMaterial}
