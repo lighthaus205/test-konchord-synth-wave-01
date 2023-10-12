@@ -4,7 +4,7 @@ import * as THREE from 'three'
 
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
-  currentMeeple: MeepleEnum
+  currentMeeple: MeepleEnum | undefined
   diceWasThrown: boolean
   beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum } }
   setDiceWasThrown: Function
@@ -23,7 +23,7 @@ interface BeutomelloGameState {
 export default create<BeutomelloGameState>((set) => {
   return {
     currentPlayer: PlayerEnum.player1,
-    currentMeeple: MeepleEnum.meeple1,
+    currentMeeple: undefined,
     diceWasThrown: false,
     cameraPosition: new THREE.Vector3(-11, 11, 11),
     dicePosition: new THREE.Vector3(4, 0, -12),
@@ -71,6 +71,10 @@ export default create<BeutomelloGameState>((set) => {
           /**
            * Get gameBoardElementTarget
            */
+          if (!state.currentMeeple) {
+            return {}
+          }
+
           const beutomelloGameState = state.beutomelloGameState
           const target = beutomelloGameState[state.currentPlayer][state.currentMeeple] + steps
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target

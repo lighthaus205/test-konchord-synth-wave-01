@@ -103,6 +103,7 @@ export default function BeutomelloGameBoard() {
       <mesh
         rotation={[-Math.PI * 0.5, 0, 0]}
         scale={1}
+        receiveShadow
       >
         <planeGeometry
           args={[16, 16, 24, 24]}

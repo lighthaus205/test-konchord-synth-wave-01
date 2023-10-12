@@ -54,7 +54,7 @@ function Meeple({
       ]}
       onClick={meepleOnClick}
     >
-      <mesh>
+      <mesh castShadow>
         <cylinderGeometry
           args={[0.15, 0.2, 0.8, 24]}
         />
