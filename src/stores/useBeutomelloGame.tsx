@@ -61,10 +61,10 @@ export default create<BeutomelloGameState>((set) => {
     gamePhase: GamePhaseEnum.init,
     displayTextInInterface: '',
     beutomelloGameState: {
-      [PlayerEnum.player1]: playerInitState,
-      [PlayerEnum.player2]: playerInitState,
-      [PlayerEnum.player3]: playerInitState,
-      [PlayerEnum.player4]: playerInitState,
+      [PlayerEnum.player1]: {...playerInitState},
+      [PlayerEnum.player2]: {...playerInitState},
+      [PlayerEnum.player3]: {...playerInitState},
+      [PlayerEnum.player4]: {...playerInitState},
     },
     setDiceWasThrown: (
       wasThrown: boolean,
@@ -141,7 +141,7 @@ export default create<BeutomelloGameState>((set) => {
           state.setGamePhase(GamePhaseEnum.selectMeeple)
         }, 1000)
         
-        return {}
+        return { currentMeeple: undefined }
       })
     },
     selectMeeple: (
