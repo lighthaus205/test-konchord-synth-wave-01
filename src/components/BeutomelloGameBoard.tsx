@@ -114,7 +114,6 @@ export default function BeutomelloGameBoard() {
   return <>
     {Object.keys(gameBoardProps).map((player, playerIndex) => {
       return Object.keys(gameBoardProps[player as PlayerEnum]).map((boardElementKey, boardElementKeyIndex) => {
-        console.log('boardElementKey', boardElementKey)
         return <GameBoardElement
           name={`${player}_gameBoardElement${boardElementKey}`}
           key={`${player}_gameBoardElement${boardElementKey}`}
