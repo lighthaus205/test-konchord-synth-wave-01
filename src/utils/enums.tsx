@@ -13,6 +13,7 @@ export enum MeepleEnum {
 }
 
 export enum GameBoardElementKeyEnum {
+  Start = 0,
   One = 1,
   Two = 2,
   Three = 3,
