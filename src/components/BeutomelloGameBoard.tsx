@@ -5,6 +5,8 @@ import * as THREE from 'three'
 import { useMemo, useRef, RefObject, Ref } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 import { QuadraticWalls } from "./RigidBodyHelpers"
+import { Float, Text } from '@react-three/drei'
+
 
 const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0, 0.6)
 const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
@@ -14,7 +16,7 @@ const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
 })
 
 const initialPositions = {
-  0: { x: 6, z: 6},
+  0: { x: 6, z: 6 },
   1: { x: 5.05, z: 5.05 },
   2: { x: 4.55, z: 4.55 },
   3: { x: 4.1, z: 4.1 },
@@ -84,19 +86,82 @@ function GameBoardElement({
   </>
 }
 
+function PlayerText({
+  player
+}: {
+  player: PlayerEnum
+}) {
+  const playerTextConfig = {
+    [PlayerEnum.player1]: {
+      displayName: 'Heiko',
+      positionX: -8.5,
+      positionZ: 8.5,
+      rotationZ: Math.PI / -4
+    },
+    [PlayerEnum.player2]: {
+      displayName: 'Konchord',
+      positionX: -8.5,
+      positionZ: -8.5,
+      rotationZ: Math.PI / 4 + Math.PI
+    },
+    [PlayerEnum.player3]: {
+      displayName: 'Player 3',
+      positionX: 8.5,
+      positionZ: -8.5,
+      rotationZ: Math.PI / -4 + Math.PI
+    },
+    [PlayerEnum.player4]: {
+      displayName: 'Player 4',
+      positionX: 8.5,
+      positionZ: 8.5,
+      rotationZ: Math.PI / 4
+    },
+  }
+  return <>
+    <Float floatIntensity={0.25} rotationIntensity={0.25}>
+      <Text
+        scale={0.8}
+        font="/fonts/Anton-Regular.ttf"
+        // maxWidth={0.25}
+        lineHeight={0.75}
+        textAlign='right'
+        position={[
+          playerTextConfig[player].positionX,
+          0,
+          playerTextConfig[player].positionZ
+        ]}
+        rotation={[
+          - Math.PI / 2,
+          0,
+          playerTextConfig[player].rotationZ
+        ]}
+      >
+        {playerTextConfig[player].displayName}
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
+    </Float>
+  </>
+}
+
 
 export default function BeutomelloGameBoard() {
   const gridMap = useLoader(TextureLoader, 'beutomelloGameBoard.jpg')
   return <>
     {Object.keys(gameBoardProps).map((player, playerIndex) => {
-      return Object.keys(gameBoardProps[player as PlayerEnum]).map((boardElementKey, boardElementKeyIndex) => {
-        return <GameBoardElement
-          name={`${player}_gameBoardElement${boardElementKey}`}
-          key={`${player}_gameBoardElement${boardElementKey}`}
+      return <>
+        <PlayerText
+          key={`displayText_${player}`}
           player={player as PlayerEnum}
-          gameBoardElementKey={parseInt(boardElementKey) as GameBoardElementKeyEnum}
         />
-      })
+        {Object.keys(gameBoardProps[player as PlayerEnum]).map((boardElementKey, boardElementKeyIndex) => {
+          return <GameBoardElement
+            name={`${player}_gameBoardElement${boardElementKey}`}
+            key={`${player}_gameBoardElement${boardElementKey}`}
+            player={player as PlayerEnum}
+            gameBoardElementKey={parseInt(boardElementKey) as GameBoardElementKeyEnum}
+          />
+        })}
+      </>
     })}
     <QuadraticWalls />
     <RigidBody type="fixed">
