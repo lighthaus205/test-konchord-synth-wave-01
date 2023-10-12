@@ -30,24 +30,24 @@ const playerInitState = {
 }
 
 const cameraPositions = {
-  [PlayerEnum.player1]: new THREE.Vector3(-11, 11, 11),
-  [PlayerEnum.player2]: new THREE.Vector3(-11, 11, -11),
-  [PlayerEnum.player3]: new THREE.Vector3(11, 11, -11),
-  [PlayerEnum.player4]: new THREE.Vector3(11, 11, 11),
+  [PlayerEnum.player1]: new THREE.Vector3(-12, 12, 12),
+  [PlayerEnum.player2]: new THREE.Vector3(-12, 12, -12),
+  [PlayerEnum.player3]: new THREE.Vector3(12, 12, -12),
+  [PlayerEnum.player4]: new THREE.Vector3(12, 12, 12),
 }
 
 const dicePositions = {
-  [PlayerEnum.player1]: new THREE.Vector3(4, 0, -12),
-  [PlayerEnum.player2]: new THREE.Vector3(12, 0, 4),
-  [PlayerEnum.player3]: new THREE.Vector3(-4, 0, 12),
-  [PlayerEnum.player4]: new THREE.Vector3(-12, 0, -4),
+  [PlayerEnum.player1]: new THREE.Vector3(-6, 0, 9),
+  [PlayerEnum.player2]: new THREE.Vector3(-9, 0, -6),
+  [PlayerEnum.player3]: new THREE.Vector3(6, 0, -9),
+  [PlayerEnum.player4]: new THREE.Vector3(9, 0, 6),
 }
 
 const coinPositions = {
-  [PlayerEnum.player1]: new THREE.Vector3(12, 0, -4),
-  [PlayerEnum.player2]: new THREE.Vector3(4, 0, 12),
-  [PlayerEnum.player3]: new THREE.Vector3(-12, 0, 4),
-  [PlayerEnum.player4]: new THREE.Vector3(-4, 0, -12),
+  [PlayerEnum.player1]: new THREE.Vector3(-9, 0, 6),
+  [PlayerEnum.player2]: new THREE.Vector3(-6, 0, -9),
+  [PlayerEnum.player3]: new THREE.Vector3(9, 0, -6),
+  [PlayerEnum.player4]: new THREE.Vector3(6, 0, 9),
 }
 
 
@@ -56,9 +56,9 @@ export default create<BeutomelloGameState>((set) => {
     currentPlayer: PlayerEnum.player1,
     currentMeeple: undefined,
     diceWasThrown: false,
-    cameraPosition: new THREE.Vector3(-11, 11, 11),
-    dicePosition: new THREE.Vector3(4, 0, -12),
-    coinPosition: new THREE.Vector3(12, 0, -4),
+    cameraPosition: new THREE.Vector3(-11, 9, 11),
+    dicePosition: new THREE.Vector3(-6, 0, 9),
+    coinPosition: new THREE.Vector3(-9, 0, 6),
     gamePhase: GamePhaseEnum.init,
     displayTextInInterface: '',
     beutomelloGameState: {

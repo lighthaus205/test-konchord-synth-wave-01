@@ -155,7 +155,7 @@ export default function Dice({
     >
       <CuboidColliderBox
         height={5}
-        length={4}
+        length={1.5}
       />
       <RigidBody
         ref={diceRef}
@@ -168,7 +168,7 @@ export default function Dice({
           position={[0, 1, 0]}
         >
           <boxGeometry
-            args={[1.5, 1.5, 1.5]}
+            args={[1, 1, 1]}
           />
           <meshStandardMaterial map={dice_texture_1} attach="material-2" />
           <meshStandardMaterial map={dice_texture_2} attach="material-0" />

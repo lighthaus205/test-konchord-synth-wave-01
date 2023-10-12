@@ -10,7 +10,7 @@ import { GamePhaseEnum } from "~/utils/enums";
 
 
 function CameraReactsToStateChanges() {
-  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(-11, 11, 11))
+  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(-12, 12, 12))
   const cameraPosition = useBeutomelloGame(state => state.cameraPosition)
   const gamePhase = useBeutomelloGame(state => state.gamePhase)
 

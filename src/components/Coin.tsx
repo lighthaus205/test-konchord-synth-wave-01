@@ -94,7 +94,7 @@ export default function Dice() {
     >
       <CuboidColliderBox
         height={5}
-        length={4}
+        length={2}
       />
       <RigidBody
         ref={coinRef}
