@@ -17,6 +17,8 @@ interface BeutomelloGameState {
   selectMeeple: Function
   gamePhase: GamePhaseEnum
   setGamePhase: Function
+  displayTextInInterface: string
+  setDisplayTextInInterface: Function
 }
 
 const playerInitState = {
@@ -57,6 +59,7 @@ export default create<BeutomelloGameState>((set) => {
     dicePosition: new THREE.Vector3(4, 0, -12),
     coinPosition: new THREE.Vector3(12, 0, -4),
     gamePhase: GamePhaseEnum.init,
+    displayTextInInterface: '',
     beutomelloGameState: {
       [PlayerEnum.player1]: playerInitState,
       [PlayerEnum.player2]: playerInitState,
@@ -135,7 +138,7 @@ export default create<BeutomelloGameState>((set) => {
         }
         state.selectPlayer(playerOrder[currentPlayer])
         setTimeout(() => {
-          state.setGamePhase(GamePhaseEnum.throwCoin)
+          state.setGamePhase(GamePhaseEnum.selectMeeple)
         }, 1000)
         
         return {}
@@ -154,6 +157,13 @@ export default create<BeutomelloGameState>((set) => {
       set((state) => {
         return { gamePhase }
       })
-    }
+    },
+    setDisplayTextInInterface: (
+      displayTextInInterface: string
+    ) => {
+      set((state) => {
+        return { displayTextInInterface }
+      })
+    },
   }
 })

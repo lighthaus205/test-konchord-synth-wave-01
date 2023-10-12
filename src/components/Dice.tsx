@@ -29,6 +29,7 @@ export default function Dice({
   const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
   const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
   const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
+  const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
 
   const dicePosition = useBeutomelloGame(state => state.dicePosition)
   useFrame((state, delta) => {
@@ -38,6 +39,10 @@ export default function Dice({
   const cubeJump = () => {
     console.log('cubeJump...');
     if (!currentPlayer || !currentMeeple) {
+      setDisplayTextInInterface('Please select meeple first')
+      setTimeout(() => {
+        setDisplayTextInInterface('')
+      }, 5000)
       console.error('Need to select player and meeple in order to jump!')
       return
     }
@@ -142,7 +147,7 @@ export default function Dice({
       console.error('Unknown dice result!')
     }
   }
-  console.log('dicePosition', dicePosition)
+
   return <>
     <group
       ref={diceGroupRef}

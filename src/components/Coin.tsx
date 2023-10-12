@@ -15,15 +15,27 @@ export default function Dice() {
   const coinGroupRef = useRef<THREE.Group>(null!)
   const fileUrl = "/penny_coin/scene.gltf";
   const gltf = useLoader(GLTFLoader, fileUrl);
-  const center = new THREE.Vector3(4, 0, -12)
+  const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
+  const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
+  const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
 
   const coinPosition = useBeutomelloGame(state => state.coinPosition)
   useFrame((state, delta) => {
     coinGroupRef.current.position.copy(coinPosition)
   })
 
+
+
   const coinJump = () => {
     console.log('coinJump...');
+    if (!currentPlayer || !currentMeeple) {
+      setDisplayTextInInterface('Please select meeple first')
+      setTimeout(() => {
+        setDisplayTextInInterface('')
+      }, 5000)
+      console.error('Need to select player and meeple in order to jump!')
+      return
+    }
     const diceMass = coinRef.current.mass()
     const impulseFactor = 5
     const torqueFactor = 10
