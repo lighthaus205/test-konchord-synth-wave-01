@@ -13,3 +13,35 @@ body,
     background: url("/konchord-background-65.jpg") no-repeat center center fixed;
     background-size: cover;
 }
+
+@font-face {
+    font-family: 'Anton';
+    src: url('/fonts/Anton-Regular.ttf');
+}
+
+/**
+ * Interface
+ */
+ .interface {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    font-family: 'Anton', sans-serif;
+}
+
+/**
+ * Interface Time
+ */
+.interface .currentPlayer {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    padding-top: 5px;
+    text-align: center;
+}
