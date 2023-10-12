@@ -29,12 +29,13 @@ export default function Home() {
               fov: 75,
               near: 0.01,
               far: 200,
-              position: [0, 8, 12]
+              position: [0, 11, 11]
             }}
           >
             <OrbitControls
               // minPolarAngle={Math.PI / 6}
-              maxPolarAngle={Math.PI / 2 - Math.PI / 8}
+              minPolarAngle={Math.PI / 2 - Math.PI / 3}
+              maxPolarAngle={Math.PI / 2 - Math.PI / 3}
             />
             <BeutomelloExperience />
           </Canvas>
