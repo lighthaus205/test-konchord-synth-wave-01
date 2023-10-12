@@ -9,7 +9,7 @@ import Interface from "~/components/Interface";
 
 
 function CameraReactsToStateChanges() {
-  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(0, 0, 0))
+  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(-11, 11, 11))
   const cameraPosition = useBeutomelloGame(state => state.cameraPosition)
   useFrame((state, delta) => {
     smoothedCameraPosition.lerp(cameraPosition, 7 * delta)

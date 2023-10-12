@@ -1,6 +1,7 @@
-import { RapierRigidBody } from "@react-three/rapier"
-import { useRef } from "react"
+import { ThreeEvent } from "@react-three/fiber"
+import useBeutomelloGame from "~/stores/useBeutomelloGame"
 import { MeepleEnum, PlayerEnum } from "~/utils/enums"
+
 
 const initialPositions = {
   [MeepleEnum.meeple1]: { x: 6.0, z: 6.0 },
@@ -27,22 +28,37 @@ function Meeple({
   positionX: number
   positionZ: number
 }) {
+  const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
+  const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
+  const selectMeeple = useBeutomelloGame((state) => state.selectMeeple)
+  const meepleOnClick = (e: ThreeEvent<MouseEvent>) => {
+    const selectedMeeple = e.eventObject.name.split('_')[1]
+    selectMeeple(selectedMeeple)
+    return e;
+  }
+  let color = meepleProps[player as PlayerEnum].color
+  if (player === currentPlayer && meeple === currentMeeple) {
+    color = 'white'
+  }
   return <>
-    <mesh
+    <group
       name={`${player}_${meeple}`}
       position={[
         player === PlayerEnum.player2 || player === PlayerEnum.player1 ? -positionX : positionX,
         0.4,
         player === PlayerEnum.player3 || player === PlayerEnum.player2 ? -positionZ : positionZ,
       ]}
+      onClick={meepleOnClick}
     >
-      <cylinderGeometry
-        args={[0.15, 0.2, 0.8, 24]}
-      />
-      <meshStandardMaterial
-        color={meepleProps[player as PlayerEnum].color}
-      />
-    </mesh>
+      <mesh>
+        <cylinderGeometry
+          args={[0.15, 0.2, 0.8, 24]}
+        />
+        <meshStandardMaterial
+          color={color}
+        />
+      </mesh>
+    </group>
   </>
 }
 
