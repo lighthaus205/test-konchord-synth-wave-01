@@ -15,6 +15,7 @@ const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
 
 const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]: { x: number, z: number } } } = {
   [PlayerEnum.player1]: {
+    0: { x: -6, z: 6},
     1: { x: -5.05, z: 5.05 },
     2: { x: -4.55, z: 4.55 },
     3: { x: -4.1, z: 4.1 },
@@ -27,6 +28,7 @@ const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]:
     10: { x: -0.95, z: 0.95 },
   },
   [PlayerEnum.player2]: {
+    0: { x: -6, z: -6},
     1: { x: -5.05, z: -5.05 },
     2: { x: -4.55, z: -4.55 },
     3: { x: -4.1, z: -4.1 },
@@ -39,6 +41,7 @@ const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]:
     10: { x: -0.95, z: -0.95 },
   },
   [PlayerEnum.player3]: {
+    0: { x: 6, z: -6},
     1: { x: 5.05, z: -5.05 },
     2: { x: 4.55, z: -4.55 },
     3: { x: 4.1, z: -4.1 },
@@ -51,6 +54,7 @@ const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]:
     10: { x: 0.95, z: -0.95 },
   },
   [PlayerEnum.player4]: {
+    0: { x: 6, z: 6},
     1: { x: 5.05, z: 5.05 },
     2: { x: 4.55, z: 4.55 },
     3: { x: 4.1, z: 4.1 },
@@ -107,27 +111,15 @@ function GameBoardElement({
 
 export default function BeutomelloGameBoard() {
   const gridMap = useLoader(TextureLoader, 'beutomelloGameBoard.jpg')
-  const players = [PlayerEnum.player1, PlayerEnum.player2, PlayerEnum.player3, PlayerEnum.player4]
-  const boardElementKeys = [
-    GameBoardElementKeyEnum.One,
-    GameBoardElementKeyEnum.Two,
-    GameBoardElementKeyEnum.Three,
-    GameBoardElementKeyEnum.Four,
-    GameBoardElementKeyEnum.Five,
-    GameBoardElementKeyEnum.Six,
-    GameBoardElementKeyEnum.Seven,
-    GameBoardElementKeyEnum.Eight,
-    GameBoardElementKeyEnum.Nine,
-    GameBoardElementKeyEnum.Ten
-  ]
   return <>
-    {players.map((player, playerIndex) => {
-      return boardElementKeys.map((boardElementKey, boardElementKeyIndex) => {
+    {Object.keys(gameBoardProps).map((player, playerIndex) => {
+      return Object.keys(gameBoardProps[player as PlayerEnum]).map((boardElementKey, boardElementKeyIndex) => {
+        console.log('boardElementKey', boardElementKey)
         return <GameBoardElement
           name={`${player}_gameBoardElement${boardElementKey}`}
           key={`${player}_gameBoardElement${boardElementKey}`}
-          player={player}
-          gameBoardElementKey={boardElementKey}
+          player={player as PlayerEnum}
+          gameBoardElementKey={parseInt(boardElementKey) as GameBoardElementKeyEnum}
         />
       })
     })}
