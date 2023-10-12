@@ -1,45 +1,66 @@
-import { RigidBody, RapierRigidBody } from "@react-three/rapier"
-import * as THREE from 'three'
+import { RapierRigidBody } from "@react-three/rapier"
 import { useRef } from "react"
-import useBeutomelloGame from "~/stores/useBeutomelloGame"
-import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
+import { MeepleEnum, PlayerEnum } from "~/utils/enums"
 
+const initialPositions = {
+  [MeepleEnum.meeple1]: { x: 6.0, z: 6.0 },
+  [MeepleEnum.meeple2]: { x: 6.4, z: 6.4 },
+  [MeepleEnum.meeple3]: { x: 6.8, z: 6.8 },
+  [MeepleEnum.meeple4]: { x: 7.2, z: 7.2 },
+}
+
+const meepleProps: { [key in PlayerEnum]: { meeplePostions: { [key in MeepleEnum]: { x: number, z: number } }, color: string } } = {
+  [PlayerEnum.player1]: { meeplePostions: initialPositions, color: 'red' },
+  [PlayerEnum.player2]: { meeplePostions: initialPositions, color: 'blue' },
+  [PlayerEnum.player3]: { meeplePostions: initialPositions, color: 'yellow' },
+  [PlayerEnum.player4]: { meeplePostions: initialPositions, color: 'green' },
+}
+
+function Meeple({
+  player,
+  meeple,
+  positionX,
+  positionZ,
+}: {
+  player: PlayerEnum
+  meeple: MeepleEnum
+  positionX: number
+  positionZ: number
+}) {
+  return <>
+    <mesh
+      name={`${player}_${meeple}`}
+      position={[
+        player === PlayerEnum.player2 || player === PlayerEnum.player1 ? -positionX : positionX,
+        0,
+        player === PlayerEnum.player3 || player === PlayerEnum.player2 ? -positionZ : positionZ,
+      ]}
+    >
+      <cylinderGeometry
+        args={[0.15, 0.2, 0.8, 24]}
+      />
+      <meshStandardMaterial
+        color={meepleProps[player as PlayerEnum].color}
+      />
+    </mesh>
+  </>
+}
 
 export default function Player() {
-  const currentPlayer = PlayerEnum.player1
-  const currentMeeple = MeepleEnum.meeple1
+
   const playerRef = useRef<RapierRigidBody>(null!)
-  const playerMeshRef = useRef<THREE.Mesh>(null!)
 
-  // const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
-  // const updateBeutomelloGameState = useBeutomelloGame((state) => state.updateBeutomelloGameState)
-
-
-  const playerJump = () => {
-    console.log('playerJump...');
-  }
-
-  const onPlayerSleep = () => {
-    console.log('onPlayerSleep...')
-  }
   return <>
-    <RigidBody
-      ref={playerRef}
-      onSleep={onPlayerSleep}
-    >
-      <mesh
-        name="player1_meeple1"
-        ref={playerMeshRef}
-        position={[-6, 0, 6]}
-        onClick={playerJump}
-      >
-        <cylinderGeometry
-          args={[0.15, 0.2, 0.8, 24]}
+    {Object.keys(meepleProps).map((player, playerIndex) => {
+      return Object.keys(meepleProps[player as PlayerEnum].meeplePostions).map((meeple, meepleIndex) => {
+        return <Meeple
+          key={`${player}_${meeple}`}
+          player={player as PlayerEnum}
+          meeple={meeple as MeepleEnum}
+          positionX={meepleProps[player as PlayerEnum].meeplePostions[meeple as MeepleEnum].x}
+          positionZ={meepleProps[player as PlayerEnum].meeplePostions[meeple as MeepleEnum].z}
         />
-        <meshStandardMaterial
-          color={'blue'}
-        />
-      </mesh>
-    </RigidBody>
+      })
+    })}
   </>
 }
