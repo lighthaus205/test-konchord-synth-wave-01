@@ -76,30 +76,30 @@ export default function Dice() {
   }
 
   return <>
-  <group
-    ref={coinGroupRef}
-    position={[center.x, center.y + 2, center.z]}
-  >
-  <CuboidColliderBox
-      height={5}
-      length={4}
-    />
-    <RigidBody
-      ref={coinRef}
-      onSleep={onCoinSleep}
-      scale={0.01}
-      position={[0, 1, 0]}
-      rotation={[Math.PI / 2, 0, 0]}
+    <group
+      ref={coinGroupRef}
+      position={[coinPosition.x, coinPosition.y + 2, coinPosition.z]}
     >
-      <mesh
-        ref={coinMeshRef}
-        onClick={coinJump}
+      <CuboidColliderBox
+        height={5}
+        length={4}
+      />
+      <RigidBody
+        ref={coinRef}
+        onSleep={onCoinSleep}
+        scale={0.01}
         position={[0, 1, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
       >
-        <primitive object={gltf.scene} />
-      </mesh>
-    </RigidBody>
-  </group>
-    
+        <mesh
+          ref={coinMeshRef}
+          onClick={coinJump}
+          position={[0, 1, 0]}
+        >
+          <primitive object={gltf.scene} />
+        </mesh>
+      </RigidBody>
+    </group>
+
   </>
 }
