@@ -1,17 +1,20 @@
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { CuboidColliderBox } from "./RigidBodyHelpers";
 import * as THREE from 'three'
-import { useRef } from "react";
-import { useLoader } from "@react-three/fiber"
+import { useRef, useState } from "react";
+import { useFrame, useLoader } from "@react-three/fiber"
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
 import { useThree } from '@react-three/fiber'
 
 
-export default function Dice() {
+export default function Dice({
+  center = new THREE.Vector3(-4, 0, -12)
+}: {
+  center?: THREE.Vector3
+}) {
   const threeState = useThree()
-
   const dice_texture_1 = useLoader(TextureLoader, 'dice_textures/1.jpg')
   const dice_texture_2 = useLoader(TextureLoader, 'dice_textures/2.jpg')
   const dice_texture_3 = useLoader(TextureLoader, 'dice_textures/3.jpg')
@@ -21,9 +24,14 @@ export default function Dice() {
 
   const diceRef = useRef<RapierRigidBody>(null!)
   const diceMeshRef = useRef<THREE.Mesh>(null!)
+  const diceGroupRef = useRef<THREE.Group>(null!)
   const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
   const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
-  const nextPlayer = useBeutomelloGame((state) => state.nextPlayer)
+
+  const dicePosition = useBeutomelloGame(state => state.dicePosition)
+  useFrame((state, delta) => {
+    diceGroupRef.current.position.copy(dicePosition)
+  })
 
   const cubeJump = () => {
     console.log('cubeJump...');
@@ -128,33 +136,37 @@ export default function Dice() {
       console.error('Unknown dice result!')
     }
   }
-
-  const center = new THREE.Vector3(-4, 0, -12)
+  console.log('dicePosition', dicePosition)
   return <>
-    <CuboidColliderBox
-      center={center}
-      height={5}
-      length={4}
-    />
-    <RigidBody
-      ref={diceRef}
-      onSleep={onDiceSleep}
-      position={[center.x, center.y + 2, center.z]}
+    <group
+      ref={diceGroupRef}
+      position={[dicePosition.x, dicePosition.y + 2, dicePosition.z]}
     >
-      <mesh
-        ref={diceMeshRef}
-        onClick={cubeJump}
+      <CuboidColliderBox
+        height={5}
+        length={4}
+      />
+      <RigidBody
+        ref={diceRef}
+        onSleep={onDiceSleep}
+        position={[0, 1, 0]}
       >
-        <boxGeometry
-          args={[1.5, 1.5, 1.5]}
-        />
-        <meshStandardMaterial map={dice_texture_1} attach="material-2" />
-        <meshStandardMaterial map={dice_texture_2} attach="material-0" />
-        <meshStandardMaterial map={dice_texture_3} attach="material-4" />
-        <meshStandardMaterial map={dice_texture_4} attach="material-5" />
-        <meshStandardMaterial map={dice_texture_5} attach="material-1" />
-        <meshStandardMaterial map={dice_texture_6} attach="material-3" />
-      </mesh>
-    </RigidBody>
+        <mesh
+          ref={diceMeshRef}
+          onClick={cubeJump}
+          position={[0, 1, 0]}
+        >
+          <boxGeometry
+            args={[1.5, 1.5, 1.5]}
+          />
+          <meshStandardMaterial map={dice_texture_1} attach="material-2" />
+          <meshStandardMaterial map={dice_texture_2} attach="material-0" />
+          <meshStandardMaterial map={dice_texture_3} attach="material-4" />
+          <meshStandardMaterial map={dice_texture_4} attach="material-5" />
+          <meshStandardMaterial map={dice_texture_5} attach="material-1" />
+          <meshStandardMaterial map={dice_texture_6} attach="material-3" />
+        </mesh>
+      </RigidBody>
+    </group>
   </>
 }

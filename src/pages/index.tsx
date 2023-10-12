@@ -6,15 +6,21 @@ import useBeutomelloGame from "~/stores/useBeutomelloGame";
 import { useState } from "react";
 import * as THREE from 'three'
 import Interface from "~/components/Interface";
+import { GamePhaseEnum } from "~/utils/enums";
 
 
 function CameraReactsToStateChanges() {
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(-11, 11, 11))
   const cameraPosition = useBeutomelloGame(state => state.cameraPosition)
+  const gamePhase = useBeutomelloGame(state => state.gamePhase)
+
   useFrame((state, delta) => {
-    smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
-    state.camera.position.copy(smoothedCameraPosition)
-    state.camera.lookAt(0, 0, 0)
+    // if ([GamePhaseEnum.switchPlayer, GamePhaseEnum.init].includes(gamePhase)) {
+    if (true) { 
+      smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
+      state.camera.position.copy(smoothedCameraPosition)
+      state.camera.lookAt(0, 0, 0)
+    }
   })
   return <></>
 }
@@ -43,14 +49,15 @@ export default function Home() {
               fov: 75,
               near: 0.01,
               far: 200,
+              position: [-12, 12, 12]
             }}
           >
             <CameraReactsToStateChanges />
-            {/* <OrbitControls
+            <OrbitControls
               // minPolarAngle={Math.PI / 6}
               // minPolarAngle={Math.PI / 2 - Math.PI / 3}
               // maxPolarAngle={Math.PI / 2 - Math.PI / 3}
-            /> */}
+            />
             <BeutomelloExperience />
           </Canvas>
           <Interface />

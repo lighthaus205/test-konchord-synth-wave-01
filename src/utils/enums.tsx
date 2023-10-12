@@ -9,7 +9,7 @@ export enum MeepleEnum {
   meeple1 = 'meeple1',
   meeple2 = 'meeple2',
   meeple3 = 'meeple3',
-  meeple4 = 'meeple4'
+  meeple4 = 'meeple4',
 }
 
 export enum GameBoardElementKeyEnum {
@@ -27,8 +27,10 @@ export enum GameBoardElementKeyEnum {
 }
 
 export enum GamePhaseEnum {
+  init = 'init',
   selectMeeple = 'selectMeeple',
   throwDice = 'throwDice',
   throwCoin = 'throwCoin',
   moveMeeple = 'moveMeeple',
+  switchPlayer = 'switchPlayer',
 }

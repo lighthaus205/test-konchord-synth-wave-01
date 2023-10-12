@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum } from '~/utils/enums'
+import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum, GamePhaseEnum } from '~/utils/enums'
 import * as THREE from 'three'
 
 interface BeutomelloGameState {
@@ -11,7 +11,12 @@ interface BeutomelloGameState {
   moveCurrentMeeple: Function
   selectPlayer: Function
   cameraPosition: THREE.Vector3
+  dicePosition: THREE.Vector3
+  coinPosition: THREE.Vector3
   nextPlayer: Function
+  selectMeeple: Function
+  gamePhase: GamePhaseEnum
+  setGamePhase: Function
 }
 
 
@@ -21,6 +26,9 @@ export default create<BeutomelloGameState>((set) => {
     currentMeeple: MeepleEnum.meeple1,
     diceWasThrown: false,
     cameraPosition: new THREE.Vector3(-11, 11, 11),
+    dicePosition: new THREE.Vector3(4, 0, -12),
+    coinPosition: new THREE.Vector3(12, 0, -4),
+    gamePhase: GamePhaseEnum.init,
     beutomelloGameState: {
       [PlayerEnum.player1]: {
         [MeepleEnum.meeple1]: GameBoardElementKeyEnum.Start,
@@ -101,14 +109,31 @@ export default create<BeutomelloGameState>((set) => {
           [PlayerEnum.player3]: new THREE.Vector3(11, 11, -11),
           [PlayerEnum.player4]: new THREE.Vector3(11, 11, 11),
         }
+
+        const dicePositions = {
+          [PlayerEnum.player1]: new THREE.Vector3(4, 0, -12),
+          [PlayerEnum.player2]: new THREE.Vector3(12, 0, 4),
+          [PlayerEnum.player3]: new THREE.Vector3(-4, 0, 12),
+          [PlayerEnum.player4]: new THREE.Vector3(-12, 0, -4),
+        }
+
+        const coinPositions = {
+          [PlayerEnum.player1]: new THREE.Vector3(12, 0, -4),
+          [PlayerEnum.player2]: new THREE.Vector3(4, 0, 12),
+          [PlayerEnum.player3]: new THREE.Vector3(-12, 0, 4),
+          [PlayerEnum.player4]: new THREE.Vector3(-4, 0, -12),
+        }
         return {
           cameraPosition: cameraPositions[player],
+          dicePosition: dicePositions[player],
+          coinPosition: coinPositions[player],
           currentPlayer: player
         }
       })
     },
     nextPlayer: () => {
       set((state) => {
+        state.setGamePhase(GamePhaseEnum.switchPlayer)
         const currentPlayer = state.currentPlayer
         const playerOrder = {
           [PlayerEnum.player1]: PlayerEnum.player2,
@@ -117,7 +142,22 @@ export default create<BeutomelloGameState>((set) => {
           [PlayerEnum.player4]: PlayerEnum.player1,
         }
         state.selectPlayer(playerOrder[currentPlayer])
+        state.setGamePhase(GamePhaseEnum.throwCoin)
         return {}
+      })
+    },
+    selectMeeple: (
+      meeple: MeepleEnum
+    ) => {
+      set((state) => {
+        return { currentMeeple: meeple}
+      })
+    },
+    setGamePhase: (
+      gamePhase: GamePhaseEnum
+    ) => {
+      set((state) => {
+        return { gamePhase }
       })
     }
   }

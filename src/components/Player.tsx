@@ -32,13 +32,17 @@ function Meeple({
   const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
   const selectMeeple = useBeutomelloGame((state) => state.selectMeeple)
   const meepleOnClick = (e: ThreeEvent<MouseEvent>) => {
+    const selectedPlayer = e.eventObject.name.split('_')[0]
     const selectedMeeple = e.eventObject.name.split('_')[1]
-    selectMeeple(selectedMeeple)
+    if (currentPlayer === selectedPlayer) {
+      selectMeeple(selectedMeeple)
+    }
     return e;
   }
   let color = meepleProps[player as PlayerEnum].color
+  let emissiveIntensity = 0
   if (player === currentPlayer && meeple === currentMeeple) {
-    color = 'white'
+    emissiveIntensity = 1
   }
   return <>
     <group
@@ -56,6 +60,8 @@ function Meeple({
         />
         <meshStandardMaterial
           color={color}
+          emissive={color}
+          emissiveIntensity={emissiveIntensity}
         />
       </mesh>
     </group>
