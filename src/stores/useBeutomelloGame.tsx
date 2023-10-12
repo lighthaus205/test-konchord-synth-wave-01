@@ -1,8 +1,6 @@
 import { create } from 'zustand'
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum } from '~/utils/enums'
 import * as THREE from 'three'
-import { useThree } from '@react-three/fiber'
-
 
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
@@ -11,6 +9,9 @@ interface BeutomelloGameState {
   beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum } }
   setDiceWasThrown: Function
   moveCurrentMeeple: Function
+  selectPlayer: Function
+  cameraPosition: THREE.Vector3
+  nextPlayer: Function
 }
 
 
@@ -19,6 +20,7 @@ export default create<BeutomelloGameState>((set) => {
     currentPlayer: PlayerEnum.player1,
     currentMeeple: MeepleEnum.meeple1,
     diceWasThrown: false,
+    cameraPosition: new THREE.Vector3(-11, 11, 11),
     beutomelloGameState: {
       [PlayerEnum.player1]: {
         [MeepleEnum.meeple1]: GameBoardElementKeyEnum.Start,
@@ -58,8 +60,10 @@ export default create<BeutomelloGameState>((set) => {
     ) => {
       set((state) => {
         if (state.diceWasThrown) {
+          /**
+           * Get gameBoardElementTarget
+           */
           const beutomelloGameState = state.beutomelloGameState
-          console.log(beutomelloGameState[state.currentPlayer][state.currentMeeple])
           const target = beutomelloGameState[state.currentPlayer][state.currentMeeple] + steps
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
 
@@ -70,16 +74,49 @@ export default create<BeutomelloGameState>((set) => {
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
           const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
           const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
+          
+          /**
+           * Move meeple
+           */
           if (gameBoardElement?.position) {
             meepleObject.position.set(
               gameBoardElement?.position.x,
-              gameBoardElement?.position.y,
+              0.4,
               gameBoardElement?.position.z
             )
           }
-          
+          state.nextPlayer()
           return { beutomelloGameState }
         }
+        return {}
+      })
+    },
+    selectPlayer: (
+      player: PlayerEnum
+    ) => {
+      set((state) => {
+        const cameraPositions = {
+          [PlayerEnum.player1]: new THREE.Vector3(-11, 11, 11),
+          [PlayerEnum.player2]: new THREE.Vector3(-11, 11, -11),
+          [PlayerEnum.player3]: new THREE.Vector3(11, 11, -11),
+          [PlayerEnum.player4]: new THREE.Vector3(11, 11, 11),
+        }
+        return {
+          cameraPosition: cameraPositions[player],
+          currentPlayer: player
+        }
+      })
+    },
+    nextPlayer: () => {
+      set((state) => {
+        const currentPlayer = state.currentPlayer
+        const playerOrder = {
+          [PlayerEnum.player1]: PlayerEnum.player2,
+          [PlayerEnum.player2]: PlayerEnum.player3,
+          [PlayerEnum.player3]: PlayerEnum.player4,
+          [PlayerEnum.player4]: PlayerEnum.player1,
+        }
+        state.selectPlayer(playerOrder[currentPlayer])
         return {}
       })
     }

@@ -23,7 +23,7 @@ export default function Dice() {
   const diceMeshRef = useRef<THREE.Mesh>(null!)
   const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
   const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
-  // const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
+  const nextPlayer = useBeutomelloGame((state) => state.nextPlayer)
 
   const cubeJump = () => {
     console.log('cubeJump...');

@@ -25,3 +25,10 @@ export enum GameBoardElementKeyEnum {
   Nine = 9,
   Ten = 10,
 }
+
+export enum GamePhaseEnum {
+  selectMeeple = 'selectMeeple',
+  throwDice = 'throwDice',
+  throwCoin = 'throwCoin',
+  moveMeeple = 'moveMeeple',
+}
