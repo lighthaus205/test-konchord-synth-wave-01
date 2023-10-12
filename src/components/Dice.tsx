@@ -27,6 +27,8 @@ export default function Dice({
   const diceGroupRef = useRef<THREE.Group>(null!)
   const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
   const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
+  const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
+  const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
 
   const dicePosition = useBeutomelloGame(state => state.dicePosition)
   useFrame((state, delta) => {
@@ -35,6 +37,10 @@ export default function Dice({
 
   const cubeJump = () => {
     console.log('cubeJump...');
+    if (!currentPlayer || !currentMeeple) {
+      console.error('Need to select player and meeple in order to jump!')
+      return
+    }
     setDiceWasThrown(true)
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3

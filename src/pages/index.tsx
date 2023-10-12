@@ -15,8 +15,8 @@ function CameraReactsToStateChanges() {
   const gamePhase = useBeutomelloGame(state => state.gamePhase)
 
   useFrame((state, delta) => {
-    // if ([GamePhaseEnum.switchPlayer, GamePhaseEnum.init].includes(gamePhase)) {
-    if (true) { 
+    if ([GamePhaseEnum.switchPlayer].includes(gamePhase)) {
+    // if (true) {
       smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
       state.camera.position.copy(smoothedCameraPosition)
       state.camera.lookAt(0, 0, 0)
@@ -56,7 +56,7 @@ export default function Home() {
             <OrbitControls
               // minPolarAngle={Math.PI / 6}
               // minPolarAngle={Math.PI / 2 - Math.PI / 3}
-              // maxPolarAngle={Math.PI / 2 - Math.PI / 3}
+              maxPolarAngle={Math.PI / 2 - Math.PI / 8}
             />
             <BeutomelloExperience />
           </Canvas>
