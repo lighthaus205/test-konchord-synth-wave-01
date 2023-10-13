@@ -2,11 +2,11 @@ import { RigidBody, CuboidCollider } from "@react-three/rapier"
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { useLoader } from "@react-three/fiber"
 import * as THREE from 'three'
-import { useMemo, useRef, RefObject, Ref } from "react"
 import { PlayerEnum, GameBoardElementKeyEnum } from "~/utils/enums"
 import { QuadraticWalls } from "./RigidBodyHelpers"
 import { Float, Text } from '@react-three/drei'
 import useBeutomelloGame from "~/stores/useBeutomelloGame"
+import { gameBoardProps } from "~/utils/positions"
 
 
 const GameBoardElementGeometry = new THREE.BoxGeometry(2, 0, 0.6)
@@ -16,37 +16,7 @@ const GameBoardElementMaterial = new THREE.MeshStandardMaterial({
   transparent: true
 })
 
-const initialPositions = {
-  0: { x: 6, z: 6 },
-  1: { x: 5.05, z: 5.05 },
-  2: { x: 4.55, z: 4.55 },
-  3: { x: 4.1, z: 4.1 },
-  4: { x: 3.65, z: 3.65 },
-  5: { x: 3.15, z: 3.15 },
-  6: { x: 2.7, z: 2.7 },
-  7: { x: 2.25, z: 2.25 },
-  8: { x: 1.8, z: 1.8 },
-  9: { x: 1.4, z: 1.4 },
-  10: { x: 0.95, z: 0.95 },
-  11: { x: 0, z: 0 },
-  12: { x: 0.95, z: 0.95 },
-  13: { x: 1.4, z: 1.4 },
-  14: { x: 1.8, z: 1.8 },
-  15: { x: 2.25, z: 2.25 },
-  16: { x: 2.7, z: 2.7 },
-  17: { x: 3.15, z: 3.15 },
-  18: { x: 3.65, z: 3.65 },
-  19: { x: 4.1, z: 4.1 },
-  20: { x: 4.55, z: 4.55 },
-  21: { x: 5.05, z: 5.05 },
-}
 
-const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]: { x: number, z: number } } } = {
-  [PlayerEnum.player1]: initialPositions,
-  [PlayerEnum.player2]: initialPositions,
-  [PlayerEnum.player3]: initialPositions,
-  [PlayerEnum.player4]: initialPositions
-}
 
 function GameBoardElement({
   player,
@@ -62,24 +32,48 @@ function GameBoardElement({
   let xPosition = 0
   let zPosition = 0
   if (player === PlayerEnum.player1) {
-    yRotation = Math.PI / -4
-    xPosition = -gameBoardProps[player][gameBoardElementKey].x
-    zPosition = gameBoardProps[player][gameBoardElementKey].z
+    if (gameBoardElementKey > 11) {
+      yRotation = Math.PI / 4
+      xPosition = -gameBoardProps[player][gameBoardElementKey].x
+      zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    } else {
+      yRotation = Math.PI / -4
+      xPosition = -gameBoardProps[player][gameBoardElementKey].x
+      zPosition = gameBoardProps[player][gameBoardElementKey].z
+    }
   }
   if (player === PlayerEnum.player2) {
-    yRotation = Math.PI / 4
-    xPosition = -gameBoardProps[player][gameBoardElementKey].x
-    zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    if (gameBoardElementKey > 11) {
+      yRotation = Math.PI / -4
+      xPosition = gameBoardProps[player][gameBoardElementKey].x
+      zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    } else {
+      yRotation = Math.PI / 4
+      xPosition = -gameBoardProps[player][gameBoardElementKey].x
+      zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    }
   }
   if (player === PlayerEnum.player3) {
-    yRotation = Math.PI / -4
-    xPosition = gameBoardProps[player][gameBoardElementKey].x
-    zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    if (gameBoardElementKey > 11) {
+      yRotation = Math.PI / 4
+      xPosition = gameBoardProps[player][gameBoardElementKey].x
+      zPosition = gameBoardProps[player][gameBoardElementKey].z
+    } else {
+      yRotation = Math.PI / -4
+      xPosition = gameBoardProps[player][gameBoardElementKey].x
+      zPosition = -gameBoardProps[player][gameBoardElementKey].z
+    }
   }
   if (player === PlayerEnum.player4) {
-    yRotation = Math.PI / 4
-    xPosition = gameBoardProps[player][gameBoardElementKey].x
-    zPosition = gameBoardProps[player][gameBoardElementKey].z
+    if (gameBoardElementKey > 11) {
+      yRotation = Math.PI / -4
+      xPosition = -gameBoardProps[player][gameBoardElementKey].x
+      zPosition = gameBoardProps[player][gameBoardElementKey].z
+    } else {
+      yRotation = Math.PI / 4
+      xPosition = gameBoardProps[player][gameBoardElementKey].x
+      zPosition = gameBoardProps[player][gameBoardElementKey].z
+    }
   }
 
   return <>

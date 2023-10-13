@@ -1,8 +1,7 @@
 import { create } from 'zustand'
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum, GamePhaseEnum } from '~/utils/enums'
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
-
+import { gameBoardElementOffsets, meepleAlreadyOnFieldOffsets } from '~/utils/positions'
 
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
@@ -27,7 +26,7 @@ interface BeutomelloGameState {
   // moveMeepleOneStep: Function
   moveMeepleCurve: THREE.CatmullRomCurve3
   setMoveMeepleCurve: Function
-  numberOfPlayers: 2 | 3 | 4
+  numberOfPlayers: 1 | 2 | 3 | 4
 }
 
 const playerInitState = {
@@ -59,6 +58,12 @@ const coinPositions = {
 }
 
 const playerOrder: {[key in BeutomelloGameState["numberOfPlayers"]]: {[key in PlayerEnum]: PlayerEnum | undefined}} = {
+  1: {
+    [PlayerEnum.player1]: PlayerEnum.player1,
+    [PlayerEnum.player2]: undefined,
+    [PlayerEnum.player3]: undefined,
+    [PlayerEnum.player4]: undefined,
+  },
   2: {
     [PlayerEnum.player1]: PlayerEnum.player2,
     [PlayerEnum.player2]: PlayerEnum.player1,
@@ -117,6 +122,8 @@ export default create<BeutomelloGameState>((set) => {
       threeState: any
     ) => {
       set((state) => {
+        // console.log('steps', steps)
+        // console.log('state.allowMoveMeeple', state.allowMoveMeeple)
         /**
          * Only take action if the dice was thrown
          */
@@ -133,7 +140,7 @@ export default create<BeutomelloGameState>((set) => {
          */
           const beutomelloGameState = state.beutomelloGameState
           const currentGaemBoardElement = beutomelloGameState[state.currentPlayer][state.currentMeeple]
-          let target;
+          let target
           if (steps === 'Zahl') {
             target = currentGaemBoardElement * 2
           } else {
@@ -143,29 +150,74 @@ export default create<BeutomelloGameState>((set) => {
               target = currentGaemBoardElement + steps
             }
           }
-
           let gameBoardElementName
           if (target > 11) {
             const currentOpponent = playerOrder[state.numberOfPlayers][state.currentPlayer]
-            // await state.setCurrentOpponent(undefined)
-            // while (state.currentOpponent === undefined) {
-            //   console.log('do nothing')
-            // }
             gameBoardElementName = `${currentOpponent}_gameBoardElement${target}`
           } else {
             gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
           }
-
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
 
           /**
            * Get Mesh Objects
            */
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
+
+          /**
+           * Handle Offsets
+           */
+          let meeplesOnGameBoardElement = 0
+          for (const meepleKey of Object.keys(MeepleEnum)) {
+            if (meepleKey === state.currentMeeple) {
+              continue
+            }
+            if (beutomelloGameState[state.currentPlayer][meepleKey as MeepleEnum] === target) {
+              meeplesOnGameBoardElement += 1
+            }
+          }
+
+          let offsetX1 = gameBoardElementOffsets[state.currentPlayer][target]?.x ? gameBoardElementOffsets[state.currentPlayer][target]?.x : 0
+          let offsetZ1 = gameBoardElementOffsets[state.currentPlayer][target]?.z ? gameBoardElementOffsets[state.currentPlayer][target]?.z : 0
+          let offsetX2 = meepleAlreadyOnFieldOffsets[state.currentPlayer][target]?.x
+          let offsetZ2 = meepleAlreadyOnFieldOffsets[state.currentPlayer][target]?.z
+
+          /**
+           * Offsets - handle opponent Side
+           */
+          if (target > 11 && offsetX1 && offsetZ1 && offsetX2 && offsetZ2) {
+            if (state.currentPlayer === PlayerEnum.player1) {
+              offsetZ1 = offsetZ1 * -1
+              offsetZ2 = offsetZ2 * -1
+            }
+          }
+
+          /**
+           * Offsets - Handle Special Case offset if target is 11
+           */
+          if (target === 11 && offsetX1 && offsetZ1) {
+            let targetSelector = 11
+            if (meeplesOnGameBoardElement === 1) {
+              targetSelector = 111
+            } else if (meeplesOnGameBoardElement === 2) {
+              targetSelector = 1111
+            } else if (meeplesOnGameBoardElement === 3) {
+              targetSelector = 11111
+            }
+            offsetX1 = gameBoardElementOffsets[state.currentPlayer][targetSelector]?.x ? gameBoardElementOffsets[state.currentPlayer][targetSelector]?.x : 0
+            offsetZ1 = gameBoardElementOffsets[state.currentPlayer][targetSelector]?.z ? gameBoardElementOffsets[state.currentPlayer][targetSelector]?.z : 0
+          }
+
+          // console.log('offsetX1', offsetX1)
+          // console.log('offsetZ1', offsetZ1)
+          // console.log('offsetX2', meeplesOnGameBoardElement * (offsetX2 ? offsetX2 : 0))
+          // console.log('offsetZ2', meeplesOnGameBoardElement * (offsetZ2 ? offsetZ2 : 0))
+
+
           const gameBoardElementPosition = new THREE.Vector3(
-            gameBoardElement.position.x,
+            gameBoardElement.position.x + offsetX1 + meeplesOnGameBoardElement * (offsetX2 ? offsetX2 : 0),
             gameBoardElement.position.y + 0.4,
-            gameBoardElement.position.z
+            gameBoardElement.position.z + offsetZ1 + meeplesOnGameBoardElement * (offsetZ2 ? offsetZ2 : 0),
           )
           const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
           const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
