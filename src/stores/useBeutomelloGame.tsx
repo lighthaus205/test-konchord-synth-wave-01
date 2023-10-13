@@ -143,7 +143,7 @@ export default create<BeutomelloGameState>((set) => {
 
           setTimeout(() => {
             state.nextPlayer()
-          }, 100)
+          }, 2500)
 
           return { beutomelloGameState, moveMeepleCurve }
         }
@@ -151,7 +151,7 @@ export default create<BeutomelloGameState>((set) => {
         if (steps === 'Kopf') {
           setTimeout(() => {
             state.nextPlayer()
-          }, 2500)
+          }, 100)
         }
         return {}
       })
