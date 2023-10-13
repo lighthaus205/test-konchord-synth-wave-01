@@ -58,6 +58,27 @@ const coinPositions = {
   [PlayerEnum.player4]: new THREE.Vector3(6, 0, 9),
 }
 
+const playerOrder: {[key in BeutomelloGameState["numberOfPlayers"]]: {[key in PlayerEnum]: PlayerEnum | undefined}} = {
+  2: {
+    [PlayerEnum.player1]: PlayerEnum.player2,
+    [PlayerEnum.player2]: PlayerEnum.player1,
+    [PlayerEnum.player3]: undefined,
+    [PlayerEnum.player4]: undefined,
+  },
+  3: {
+    [PlayerEnum.player1]: PlayerEnum.player2,
+    [PlayerEnum.player2]: PlayerEnum.player3,
+    [PlayerEnum.player3]: PlayerEnum.player1,
+    [PlayerEnum.player4]: undefined,
+  },
+  4: {
+    [PlayerEnum.player1]: PlayerEnum.player2,
+    [PlayerEnum.player2]: PlayerEnum.player3,
+    [PlayerEnum.player3]: PlayerEnum.player4,
+    [PlayerEnum.player4]: PlayerEnum.player1,
+  }
+}
+
 
 export default create<BeutomelloGameState>((set) => {
   return {
@@ -125,7 +146,7 @@ export default create<BeutomelloGameState>((set) => {
 
           let gameBoardElementName
           if (target > 11) {
-            const currentOpponent = state.currentPlayer === PlayerEnum.player1 ? PlayerEnum.player2 : PlayerEnum.player1
+            const currentOpponent = playerOrder[state.numberOfPlayers][state.currentPlayer]
             // await state.setCurrentOpponent(undefined)
             // while (state.currentOpponent === undefined) {
             //   console.log('do nothing')
@@ -191,26 +212,7 @@ export default create<BeutomelloGameState>((set) => {
       set((state) => {
         state.setGamePhase(GamePhaseEnum.switchPlayer)
         const currentPlayer = state.currentPlayer
-        const playerOrder = {
-          2: {
-            [PlayerEnum.player1]: PlayerEnum.player2,
-            [PlayerEnum.player2]: PlayerEnum.player1,
-            [PlayerEnum.player3]: undefined,
-            [PlayerEnum.player4]: undefined,
-          },
-          3: {
-            [PlayerEnum.player1]: PlayerEnum.player2,
-            [PlayerEnum.player2]: PlayerEnum.player3,
-            [PlayerEnum.player3]: PlayerEnum.player1,
-            [PlayerEnum.player4]: undefined,
-          },
-          4: {
-            [PlayerEnum.player1]: PlayerEnum.player2,
-            [PlayerEnum.player2]: PlayerEnum.player3,
-            [PlayerEnum.player3]: PlayerEnum.player4,
-            [PlayerEnum.player4]: PlayerEnum.player1,
-          }
-        }
+        
         state.selectPlayer(playerOrder[state.numberOfPlayers][currentPlayer])
         setTimeout(() => {
           state.setGamePhase(GamePhaseEnum.selectMeeple)
