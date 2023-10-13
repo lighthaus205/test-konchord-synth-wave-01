@@ -33,7 +33,7 @@ body,
 }
 
 /**
- * Interface Time
+ * Interface currentPlayer
  */
 .interface .currentPlayer {
     position: absolute;
@@ -44,4 +44,21 @@ body,
     font-size: 18px;
     padding-top: 5px;
     text-align: center;
+    pointer-events: auto;
+    cursor: pointer;
 }
+
+/**
+ * Interface selectCurrentOpponent
+ */
+ /* .interface .selectCurrentOpponent {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    padding-top: 5px;
+    text-align: center;
+    
+} */

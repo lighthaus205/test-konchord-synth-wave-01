@@ -53,7 +53,17 @@ export default function Dice() {
   
   if (meeplePosition !== undefined) {
     if ([
-      GameBoardElementKeyEnum.Start
+      GameBoardElementKeyEnum.Start,
+      GameBoardElementKeyEnum.Twelve,
+      GameBoardElementKeyEnum.Thriteen,
+      GameBoardElementKeyEnum.Fourteen,
+      GameBoardElementKeyEnum.Fifteen,
+      GameBoardElementKeyEnum.Sixteen,
+      GameBoardElementKeyEnum.Seventeen,
+      GameBoardElementKeyEnum.Eighteen,
+      GameBoardElementKeyEnum.Nineteen,
+      GameBoardElementKeyEnum.Twenty,
+      GameBoardElementKeyEnum.Twentyone,
     ].includes(meeplePosition)) {
       canThrowDice = true
     } else {

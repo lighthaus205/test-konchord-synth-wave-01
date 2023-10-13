@@ -7,6 +7,8 @@ import { useFrame } from '@react-three/fiber'
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
   currentMeeple: MeepleEnum | undefined
+  currentOpponent: PlayerEnum | undefined
+  setCurrentOpponent: Function
   allowMoveMeeple: boolean
   beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum } }
   setAllowMoveMeeple: Function
@@ -61,6 +63,7 @@ export default create<BeutomelloGameState>((set) => {
   return {
     currentPlayer: PlayerEnum.player1,
     currentMeeple: undefined,
+    currentOpponent: PlayerEnum.player1,
     allowMoveMeeple: false,
     cameraPosition: new THREE.Vector3(-11, 9, 11),
     dicePosition: new THREE.Vector3(-6, 0, 9),
@@ -113,14 +116,30 @@ export default create<BeutomelloGameState>((set) => {
           if (steps === 'Zahl') {
             target = currentGaemBoardElement * 2
           } else {
-            target = currentGaemBoardElement + steps
+            if (currentGaemBoardElement > 11) {
+              target = currentGaemBoardElement - steps
+            } else {
+              target = currentGaemBoardElement + steps
+            }
           }
+
+          let gameBoardElementName
+          if (target > 11) {
+            const currentOpponent = state.currentPlayer === PlayerEnum.player1 ? PlayerEnum.player2 : PlayerEnum.player1
+            // await state.setCurrentOpponent(undefined)
+            // while (state.currentOpponent === undefined) {
+            //   console.log('do nothing')
+            // }
+            gameBoardElementName = `${currentOpponent}_gameBoardElement${target}`
+          } else {
+            gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
+          }
+
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
 
           /**
            * Get Mesh Objects
            */
-          const gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
           const gameBoardElementPosition = new THREE.Vector3(
             gameBoardElement.position.x,
@@ -228,5 +247,12 @@ export default create<BeutomelloGameState>((set) => {
         return { moveMeepleCurve }
       })
     },
+    setCurrentOpponent: (
+      currentOpponent: PlayerEnum
+    ) => {
+      set((state) => {
+        return { currentOpponent }
+      })
+    }
   }
 })
