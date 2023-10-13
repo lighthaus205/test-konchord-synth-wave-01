@@ -24,6 +24,7 @@ export enum GameBoardElementKeyEnum {
   Eight = 8,
   Nine = 9,
   Ten = 10,
+  Eleven = 11,
 }
 
 export enum GamePhaseEnum {

@@ -7,6 +7,7 @@ import { useFrame, useLoader } from "@react-three/fiber"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { isHalfPi, isMinusHalfPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
+import { GameBoardElementKeyEnum } from "~/utils/enums";
 
 
 export default function Dice() {
@@ -14,20 +15,85 @@ export default function Dice() {
   const coinMeshRef = useRef<THREE.Mesh>(null!)
   const coinGroupRef = useRef<THREE.Group>(null!)
   const fileUrl = "/penny_coin/scene.gltf";
-  const gltf = useLoader(GLTFLoader, fileUrl);
+  const coinModel = useLoader(GLTFLoader, fileUrl)
+
+  /**
+   * Get States
+   */
   const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
   const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
   const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
-
   const coinPosition = useBeutomelloGame(state => state.coinPosition)
+  const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
+
+
+  /**
+   * Calculate if dice can be thrown
+   */
+  let meeplePosition: GameBoardElementKeyEnum | undefined
+  let canThrowCoin: boolean
+  if (currentMeeple) {
+    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple]
+  }
+  
+  if (meeplePosition !== undefined) {
+    if ([
+      GameBoardElementKeyEnum.One,
+      GameBoardElementKeyEnum.Two,
+      GameBoardElementKeyEnum.Three,
+      GameBoardElementKeyEnum.Four,
+      GameBoardElementKeyEnum.Five,
+      GameBoardElementKeyEnum.Six,
+      GameBoardElementKeyEnum.Seven,
+      GameBoardElementKeyEnum.Eight,
+      GameBoardElementKeyEnum.Nine,
+      GameBoardElementKeyEnum.Ten,
+    ].includes(meeplePosition)) {
+      canThrowCoin = true
+    } else {
+      canThrowCoin = false
+    }
+  } else {
+    canThrowCoin = false
+  }  
+
+  /**
+   * Update color of coin
+   */
+  if (!canThrowCoin) {
+    coinModel.scene.traverse((child: any) => {
+      if (child.isMesh) {
+        const material = child.material
+        if (material.color) {
+          material.color.set('#333')
+        }
+      }
+    })
+  } else {
+    coinModel.scene.traverse((child: any) => {
+      if (child.isMesh) {
+        const material = child.material
+        if (material.color) {
+          material.color.set('#fff')
+        }
+      }
+    })
+  }
+
   useFrame((state, delta) => {
     coinGroupRef.current.position.copy(coinPosition)
   })
 
-
-
   const coinJump = () => {
-    console.log('coinJump...');
+    // console.log('coinJump...')
+    if (!canThrowCoin) {
+      setDisplayTextInInterface('Cannot throw Coin for selected meeple')
+      setTimeout(() => {
+        setDisplayTextInInterface('')
+      }, 5000)
+      console.error('Cannot throw Coin for selected meeple')
+      return
+    }
     if (!currentPlayer || !currentMeeple) {
       setDisplayTextInInterface('Please select meeple first')
       setTimeout(() => {
@@ -52,7 +118,7 @@ export default function Dice() {
   }
 
   const onCoinSleep = () => {
-    console.log('onCoinSleep...');
+    // console.log('onCoinSleep...');
     const euler = new THREE.Euler()
     if (coinMeshRef.current.parent?.quaternion) {
       euler.setFromQuaternion(
@@ -108,7 +174,7 @@ export default function Dice() {
           onClick={coinJump}
           position={[0, 1, 0]}
         >
-          <primitive object={gltf.scene} />
+          <primitive object={coinModel.scene} />
         </mesh>
       </RigidBody>
     </group>

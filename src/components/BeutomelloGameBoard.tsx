@@ -28,6 +28,7 @@ const initialPositions = {
   8: { x: 1.8, z: 1.8 },
   9: { x: 1.4, z: 1.4 },
   10: { x: 0.95, z: 0.95 },
+  11: { x: 0, z: 0 },
 }
 
 const gameBoardProps: { [key in PlayerEnum]: { [key in GameBoardElementKeyEnum]: { x: number, z: number } } } = {
