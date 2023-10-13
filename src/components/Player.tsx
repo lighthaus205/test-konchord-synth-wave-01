@@ -1,6 +1,6 @@
 import { ThreeEvent, useFrame } from "@react-three/fiber"
 import useBeutomelloGame from "~/stores/useBeutomelloGame"
-import { MeepleEnum, PlayerEnum } from "~/utils/enums"
+import { MeepleEnum, PlayerEnum, GamePhaseEnum } from "~/utils/enums"
 import * as THREE from 'three'
 
 const initialPositions = {
@@ -33,6 +33,7 @@ function Meeple({
   const selectMeeple = useBeutomelloGame((state) => state.selectMeeple)
   const moveMeepleCurve = useBeutomelloGame((state) => state.moveMeepleCurve)
   const setMoveMeepleCurve = useBeutomelloGame((state) => state.setMoveMeepleCurve)
+  const setGamePhase = useBeutomelloGame((state) => state.setGamePhase)
 
   const meepleOnClick = (e: ThreeEvent<MouseEvent>) => {
     const selectedPlayer = e.eventObject.name.split('_')[0]
@@ -40,6 +41,7 @@ function Meeple({
     if (currentPlayer === selectedPlayer) {
       selectMeeple(selectedMeeple)
     }
+    setGamePhase(GamePhaseEnum.playing)
     return e;
   }
   let color = meepleProps[player as PlayerEnum].color

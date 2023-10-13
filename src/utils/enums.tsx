@@ -39,9 +39,7 @@ export enum GameBoardElementKeyEnum {
 
 export enum GamePhaseEnum {
   init = 'init',
+  playing = 'playing',
   selectMeeple = 'selectMeeple',
-  throwDice = 'throwDice',
-  throwCoin = 'throwCoin',
-  moveMeeple = 'moveMeeple',
   switchPlayer = 'switchPlayer',
 }
