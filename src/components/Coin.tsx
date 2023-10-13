@@ -7,7 +7,7 @@ import { useFrame, useLoader, useThree } from "@react-three/fiber"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { isHalfPi, isMinusHalfPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
-import { GameBoardElementKeyEnum } from "~/utils/enums";
+import { GameBoardElementKeyEnum, GamePhaseEnum } from "~/utils/enums";
 
 
 export default function Dice() {
@@ -29,7 +29,7 @@ export default function Dice() {
   const coinPosition = useBeutomelloGame(state => state.coinPosition)
   const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
   const setAllowMoveMeeple = useBeutomelloGame((state) => state.setAllowMoveMeeple)
-
+  const gamePhase = useBeutomelloGame((state) => state.gamePhase)
 
   /**
    * Calculate if dice can be thrown
@@ -89,7 +89,7 @@ export default function Dice() {
   })
 
   const coinJump = () => {
-    // console.log('coinJump...')
+    console.log('coinJump...')
     if (!canThrowCoin) {
       setDisplayTextInInterface('Cannot throw Coin for selected meeple')
       setTimeout(() => {
@@ -122,7 +122,10 @@ export default function Dice() {
   }
 
   const onCoinSleep = () => {
-    // console.log('onCoinSleep...');
+    console.log('onCoinSleep...');
+    if (gamePhase === GamePhaseEnum.init) {
+      return
+    }
     const euler = new THREE.Euler()
     if (coinMeshRef.current.parent?.quaternion) {
       euler.setFromQuaternion(

@@ -7,7 +7,7 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
 import { useThree } from '@react-three/fiber'
-import { GameBoardElementKeyEnum } from "~/utils/enums";
+import { GameBoardElementKeyEnum, GamePhaseEnum } from "~/utils/enums";
 
 
 export default function Dice() {
@@ -40,6 +40,7 @@ export default function Dice() {
   const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
   const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
   const dicePosition = useBeutomelloGame(state => state.dicePosition)
+  const gamePhase = useBeutomelloGame(state => state.gamePhase)
 
   /**
    * Calculate if dice can be thrown
@@ -50,7 +51,7 @@ export default function Dice() {
     meeplePosition = beutomelloGameState[currentPlayer][currentMeeple]
   }
 
-  
+
   if (meeplePosition !== undefined) {
     if ([
       GameBoardElementKeyEnum.Start,
@@ -72,14 +73,14 @@ export default function Dice() {
   } else {
     canThrowDice = false
   }
-  
+
 
   useFrame((state, delta) => {
     diceGroupRef.current.position.copy(dicePosition)
   })
 
   const diceJump = () => {
-    // console.log('diceJump...')
+    console.log('diceJump...')
     if (!canThrowDice) {
       setDisplayTextInInterface('Cannot throw Dice for selected meeple')
       setTimeout(() => {
@@ -96,7 +97,7 @@ export default function Dice() {
       console.error('Need to select player and meeple in order to jump!')
       return
     }
-    
+
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3
     const torqueFactor = 10
@@ -113,7 +114,10 @@ export default function Dice() {
   }
 
   const onDiceSleep = () => {
-    // console.log('onDiceSleep...');
+    console.log('onDiceSleep...');
+    if (gamePhase === GamePhaseEnum.init) {
+      return
+    }
     const euler = new THREE.Euler()
     if (diceMeshRef.current.parent?.quaternion) {
       euler.setFromQuaternion(
