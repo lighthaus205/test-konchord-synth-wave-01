@@ -24,13 +24,22 @@ export enum GameBoardElementKeyEnum {
   Eight = 8,
   Nine = 9,
   Ten = 10,
+  Eleven = 11,
+  Twelve = 12,
+  Thriteen = 13,
+  Fourteen = 14,
+  Fifteen = 15,
+  Sixteen = 16,
+  Seventeen = 17,
+  Eighteen = 18,
+  Nineteen = 19,
+  Twenty = 20,
+  Twentyone = 21,
 }
 
 export enum GamePhaseEnum {
   init = 'init',
+  playing = 'playing',
   selectMeeple = 'selectMeeple',
-  throwDice = 'throwDice',
-  throwCoin = 'throwCoin',
-  moveMeeple = 'moveMeeple',
   switchPlayer = 'switchPlayer',
 }
