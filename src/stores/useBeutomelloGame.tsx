@@ -25,6 +25,7 @@ interface BeutomelloGameState {
   // moveMeepleOneStep: Function
   moveMeepleCurve: THREE.CatmullRomCurve3
   setMoveMeepleCurve: Function
+  numberOfPlayers: 2 | 3 | 4
 }
 
 const playerInitState = {
@@ -66,6 +67,7 @@ export default create<BeutomelloGameState>((set) => {
     coinPosition: new THREE.Vector3(-9, 0, 6),
     gamePhase: GamePhaseEnum.init,
     displayTextInInterface: '',
+    numberOfPlayers: 2,
     moveMeepleCurve: new THREE.CatmullRomCurve3(),
     beutomelloGameState: {
       [PlayerEnum.player1]: { ...playerInitState },
@@ -159,12 +161,26 @@ export default create<BeutomelloGameState>((set) => {
         state.setGamePhase(GamePhaseEnum.switchPlayer)
         const currentPlayer = state.currentPlayer
         const playerOrder = {
-          [PlayerEnum.player1]: PlayerEnum.player2,
-          [PlayerEnum.player2]: PlayerEnum.player3,
-          [PlayerEnum.player3]: PlayerEnum.player4,
-          [PlayerEnum.player4]: PlayerEnum.player1,
+          2: {
+            [PlayerEnum.player1]: PlayerEnum.player2,
+            [PlayerEnum.player2]: PlayerEnum.player1,
+            [PlayerEnum.player3]: undefined,
+            [PlayerEnum.player4]: undefined,
+          },
+          3: {
+            [PlayerEnum.player1]: PlayerEnum.player2,
+            [PlayerEnum.player2]: PlayerEnum.player3,
+            [PlayerEnum.player3]: PlayerEnum.player1,
+            [PlayerEnum.player4]: undefined,
+          },
+          4: {
+            [PlayerEnum.player1]: PlayerEnum.player2,
+            [PlayerEnum.player2]: PlayerEnum.player3,
+            [PlayerEnum.player3]: PlayerEnum.player4,
+            [PlayerEnum.player4]: PlayerEnum.player1,
+          }
         }
-        state.selectPlayer(playerOrder[currentPlayer])
+        state.selectPlayer(playerOrder[state.numberOfPlayers][currentPlayer])
         setTimeout(() => {
           state.setGamePhase(GamePhaseEnum.selectMeeple)
         }, 1000)

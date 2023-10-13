@@ -87,8 +87,13 @@ function Meeple({
 }
 
 export default function Player() {
+  const numberOfPlayers = useBeutomelloGame((state) => state.numberOfPlayers)
+
   return <>
     {Object.keys(meepleProps).map((player, playerIndex) => {
+      if (playerIndex + 1 > numberOfPlayers) {
+        return
+      }
       return Object.keys(meepleProps[player as PlayerEnum].meeplePostions).map((meeple, meepleIndex) => {
         return <Meeple
           key={`${player}_${meeple}`}
