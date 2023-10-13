@@ -7,9 +7,9 @@ import { useFrame } from '@react-three/fiber'
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
   currentMeeple: MeepleEnum | undefined
-  diceWasThrown: boolean
+  allowMoveMeeple: boolean
   beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum } }
-  setDiceWasThrown: Function
+  setAllowMoveMeeple: Function
   moveCurrentMeeple: Function
   selectPlayer: Function
   cameraPosition: THREE.Vector3
@@ -61,7 +61,7 @@ export default create<BeutomelloGameState>((set) => {
   return {
     currentPlayer: PlayerEnum.player1,
     currentMeeple: undefined,
-    diceWasThrown: false,
+    allowMoveMeeple: false,
     cameraPosition: new THREE.Vector3(-11, 9, 11),
     dicePosition: new THREE.Vector3(-6, 0, 9),
     coinPosition: new THREE.Vector3(-9, 0, 6),
@@ -81,22 +81,22 @@ export default create<BeutomelloGameState>((set) => {
       [PlayerEnum.player3]: 'Player 3',
       [PlayerEnum.player4]: 'Player 4',
     },
-    setDiceWasThrown: (
-      wasThrown: boolean,
+    setAllowMoveMeeple: (
+      allowMoveMeeple: boolean,
     ) => {
       set((state) => {
-        return { diceWasThrown: wasThrown }
+        return { allowMoveMeeple: allowMoveMeeple }
       })
     },
     moveCurrentMeeple: (
-      steps: number,
+      steps: number | 'Zahl' | 'Kopf',
       threeState: any
     ) => {
       set((state) => {
         /**
          * Only take action if the dice was thrown
          */
-        if (state.diceWasThrown) {
+        if (state.allowMoveMeeple && steps !== 'Kopf') {
           /**
            * Only take action if the currentMeeple has been set
            */
@@ -108,7 +108,13 @@ export default create<BeutomelloGameState>((set) => {
          * Get gameBoardElementTarget
          */
           const beutomelloGameState = state.beutomelloGameState
-          const target = beutomelloGameState[state.currentPlayer][state.currentMeeple] + steps
+          const currentGaemBoardElement = beutomelloGameState[state.currentPlayer][state.currentMeeple]
+          let target;
+          if (steps === 'Zahl') {
+            target = currentGaemBoardElement * 2
+          } else {
+            target = currentGaemBoardElement + steps
+          }
           beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
 
           /**
@@ -137,9 +143,15 @@ export default create<BeutomelloGameState>((set) => {
 
           setTimeout(() => {
             state.nextPlayer()
-          }, 2500)
+          }, 100)
 
           return { beutomelloGameState, moveMeepleCurve }
+        }
+
+        if (steps === 'Kopf') {
+          setTimeout(() => {
+            state.nextPlayer()
+          }, 2500)
         }
         return {}
       })

@@ -34,7 +34,7 @@ export default function Dice() {
    * Get States
    */
   const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
-  const setDiceWasThrown = useBeutomelloGame((state) => state.setDiceWasThrown)
+  const setAllowMoveMeeple = useBeutomelloGame((state) => state.setAllowMoveMeeple)
   const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
   const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
   const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
@@ -86,7 +86,7 @@ export default function Dice() {
       console.error('Need to select player and meeple in order to jump!')
       return
     }
-    setDiceWasThrown(true)
+    
     const diceMass = diceRef.current.mass()
     const impulseFactor = 3
     const torqueFactor = 10
@@ -180,9 +180,9 @@ export default function Dice() {
       }
     }
     if (diceResult) {
-      console.log('Move meeple ' + diceResult + ' steps')
+      setAllowMoveMeeple(true)
       moveCurrentMeeple(diceResult, threeState)
-      setDiceWasThrown(false)
+      setAllowMoveMeeple(false)
     } else {
       console.error('Unknown dice result!')
     }

@@ -2,7 +2,7 @@ import { RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { CuboidColliderBox } from "./RigidBodyHelpers";
 import * as THREE from 'three'
 import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber"
+import { useFrame, useLoader, useThree } from "@react-three/fiber"
 // import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { isHalfPi, isMinusHalfPi } from "~/utils/mathHelpers";
@@ -11,6 +11,8 @@ import { GameBoardElementKeyEnum } from "~/utils/enums";
 
 
 export default function Dice() {
+  const threeState = useThree()
+
   const coinRef = useRef<RapierRigidBody>(null!)
   const coinMeshRef = useRef<THREE.Mesh>(null!)
   const coinGroupRef = useRef<THREE.Group>(null!)
@@ -20,11 +22,13 @@ export default function Dice() {
   /**
    * Get States
    */
+  const moveCurrentMeeple = useBeutomelloGame((state) => state.moveCurrentMeeple)
   const currentPlayer = useBeutomelloGame((state) => state.currentPlayer)
   const currentMeeple = useBeutomelloGame((state) => state.currentMeeple)
   const setDisplayTextInInterface = useBeutomelloGame((state) => state.setDisplayTextInInterface)
   const coinPosition = useBeutomelloGame(state => state.coinPosition)
   const beutomelloGameState = useBeutomelloGame((state) => state.beutomelloGameState)
+  const setAllowMoveMeeple = useBeutomelloGame((state) => state.setAllowMoveMeeple)
 
 
   /**
@@ -145,9 +149,11 @@ export default function Dice() {
     // console.log('isPiOrMinusPi(euler.z)', isPiOrMinusPi(euler.z))
 
     if (isHalfPi(euler.x)) {
-      console.log('Zahl')
+      setAllowMoveMeeple(true)
+      moveCurrentMeeple('Zahl', threeState)
+      setAllowMoveMeeple(false)
     } else if (isMinusHalfPi(euler.x)) {
-      console.log('Kopf')
+      moveCurrentMeeple('Kopf', threeState)
     } else {
       console.log('not implemented')
     }
