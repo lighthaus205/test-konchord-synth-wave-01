@@ -150,20 +150,38 @@ export default create<BeutomelloGameState>((set) => {
               target = currentGaemBoardElement + steps
             }
           }
+          beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
+
+          /**
+           * Get Name of gameBoardElement to move to
+           */
           let gameBoardElementName
           if (target > 11) {
+            let targetMapping: {[key: number]: number} = {
+              12: 10,
+              13: 9,
+              14: 8,
+              15: 7,
+              16: 6,
+              17: 5,
+              18: 4,
+              19: 3,
+              20: 2,
+              21: 1,
+            }
             const currentOpponent = playerOrder[state.numberOfPlayers][state.currentPlayer]
-            gameBoardElementName = `${currentOpponent}_gameBoardElement${target}`
+            gameBoardElementName = `${currentOpponent}_gameBoardElement${targetMapping[target]}`
           } else {
             gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
           }
-          beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
 
           /**
            * Get Mesh Objects
            */
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
-
+          const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
+          const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
+          
           /**
            * Handle Offsets
            */
@@ -182,13 +200,50 @@ export default create<BeutomelloGameState>((set) => {
           let offsetX2 = meepleAlreadyOnFieldOffsets[state.currentPlayer][target]?.x
           let offsetZ2 = meepleAlreadyOnFieldOffsets[state.currentPlayer][target]?.z
 
+          let playerOffsetFactorX = 1
+          let playerOffsetFactorZ = 1
+          let playerOffsetFactorOpponentSideX = 1
+          let playerOffsetFactorOpponentSideZ = 1
+          if (state.currentPlayer === PlayerEnum.player1) {
+            playerOffsetFactorOpponentSideZ = -1
+          }
+          if (state.currentPlayer === PlayerEnum.player2) {
+            playerOffsetFactorX = -1
+            if (state.numberOfPlayers === 2) {
+              playerOffsetFactorOpponentSideX = -1
+              playerOffsetFactorOpponentSideZ = -1
+            }
+          }
+          if (state.currentPlayer === PlayerEnum.player3) {
+            playerOffsetFactorX = -1
+            playerOffsetFactorZ = -1
+            if (state.numberOfPlayers === 3) {
+              playerOffsetFactorOpponentSideX = -1
+              playerOffsetFactorOpponentSideZ = -1
+            } else {
+              playerOffsetFactorOpponentSideX = -1
+            }
+          }
+          if (state.currentPlayer === PlayerEnum.player4) {
+            playerOffsetFactorZ = -1
+            playerOffsetFactorOpponentSideX = -1
+            playerOffsetFactorOpponentSideZ = -1
+          }
+
           /**
            * Offsets - handle opponent Side
            */
-          if (target > 11 && offsetX1 && offsetZ1 && offsetX2 && offsetZ2) {
-            if (state.currentPlayer === PlayerEnum.player1) {
-              offsetZ1 = offsetZ1 * -1
-              offsetZ2 = offsetZ2 * -1
+          if (offsetX1 && offsetZ1 && offsetX2 && offsetZ2) {
+            if (target < 11) {
+              offsetX1 = offsetX1 * playerOffsetFactorX
+              offsetZ1 = offsetZ1 * playerOffsetFactorZ
+              offsetX2 = offsetX2 * playerOffsetFactorX
+              offsetZ2 = offsetZ2 * playerOffsetFactorZ
+            } else {
+              offsetX1 = offsetX1 * playerOffsetFactorOpponentSideX
+              offsetZ1 = offsetZ1 * playerOffsetFactorOpponentSideZ
+              offsetX2 = offsetX2 * playerOffsetFactorOpponentSideX
+              offsetZ2 = offsetZ2 * playerOffsetFactorOpponentSideZ
             }
           }
 
@@ -212,16 +267,16 @@ export default create<BeutomelloGameState>((set) => {
           // console.log('offsetZ1', offsetZ1)
           // console.log('offsetX2', meeplesOnGameBoardElement * (offsetX2 ? offsetX2 : 0))
           // console.log('offsetZ2', meeplesOnGameBoardElement * (offsetZ2 ? offsetZ2 : 0))
+          // console.log('target', target)
 
-
+          /**
+           * Get Positions Vector to move meeple to
+           */
           const gameBoardElementPosition = new THREE.Vector3(
             gameBoardElement.position.x + offsetX1 + meeplesOnGameBoardElement * (offsetX2 ? offsetX2 : 0),
             gameBoardElement.position.y + 0.4,
             gameBoardElement.position.z + offsetZ1 + meeplesOnGameBoardElement * (offsetZ2 ? offsetZ2 : 0),
           )
-          const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
-          const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
-
           const midpoint = new THREE.Vector3();
           midpoint.addVectors(meepleObject.position, gameBoardElementPosition).divideScalar(2);
           midpoint.y = 2
