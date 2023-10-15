@@ -9,7 +9,7 @@ interface BeutomelloGameStateInterface {
   currentOpponent: PlayerEnum | undefined
   setCurrentOpponent: Function
   allowMoveMeeple: boolean
-  beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: {currentGameBoardElement: GameBoardElementKeyEnum, opponent: PlayerEnum | undefined} } }
+  beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: { currentGameBoardElement: GameBoardElementKeyEnum, opponent: PlayerEnum | undefined } } }
   setAllowMoveMeeple: Function
   moveCurrentMeeple: Function
   selectPlayer: Function
@@ -35,10 +35,10 @@ type throwOpponentMeeplesType = {
 }
 
 const playerInitState = {
-  [MeepleEnum.meeple1]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
-  [MeepleEnum.meeple2]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
-  [MeepleEnum.meeple3]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
-  [MeepleEnum.meeple4]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
+  [MeepleEnum.meeple1]: { currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined },
+  [MeepleEnum.meeple2]: { currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined },
+  [MeepleEnum.meeple3]: { currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined },
+  [MeepleEnum.meeple4]: { currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined },
 }
 
 const cameraPositions = {
@@ -62,7 +62,7 @@ const coinPositions = {
   [PlayerEnum.player4]: new THREE.Vector3(6, 0, 9),
 }
 
-const playerOrder: {[key in BeutomelloGameStateInterface["numberOfPlayers"]]: {[key in PlayerEnum]: PlayerEnum | undefined}} = {
+const playerOrder: { [key in BeutomelloGameStateInterface["numberOfPlayers"]]: { [key in PlayerEnum]: PlayerEnum | undefined } } = {
   1: {
     [PlayerEnum.player1]: PlayerEnum.player1,
     [PlayerEnum.player2]: undefined,
@@ -417,12 +417,13 @@ export default create<BeutomelloGameStateInterface>((set) => {
             const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
             const positionX = initialMeeplePositions[meepleKey as MeepleEnum].x
             const positionZ = initialMeeplePositions[meepleKey as MeepleEnum].z
-            const positionVector = [
+            const positionVector = new THREE.Vector3(
               playerKey === PlayerEnum.player2 || playerKey === PlayerEnum.player1 ? -positionX : positionX,
               0.4,
               playerKey === PlayerEnum.player3 || playerKey === PlayerEnum.player2 ? -positionZ : positionZ,
-            ]
-            meepleObject.position.set(positionVector)
+            )
+
+            meepleObject.position.set(positionVector.x, positionVector.y, positionVector.z)
             
             beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].currentGameBoardElement = GameBoardElementKeyEnum.Start
             beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].opponent = undefined
