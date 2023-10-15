@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum, GamePhaseEnum } from '~/utils/enums'
 import * as THREE from 'three'
-import { gameBoardElementOffsets, meepleAlreadyOnFieldOffsets } from '~/utils/positions'
+import { gameBoardElementOffsets, meepleAlreadyOnFieldOffsets, targetOpponentMapping } from '~/utils/positions'
 
 interface BeutomelloGameState {
   currentPlayer: PlayerEnum
@@ -138,8 +138,8 @@ export default create<BeutomelloGameState>((set) => {
           /**
          * Get gameBoardElementTarget
          */
-          const beutomelloGameState = state.beutomelloGameState
-          const currentGameBoardElement = beutomelloGameState[state.currentPlayer][state.currentMeeple].currentGameBoardElement
+          const beutomelloGameStateCopy = JSON.parse(JSON.stringify(state.beutomelloGameState))
+          const currentGameBoardElement = beutomelloGameStateCopy[state.currentPlayer][state.currentMeeple].currentGameBoardElement
           let target
           if (steps === 'Zahl') {
             target = currentGameBoardElement * 2
@@ -151,26 +151,13 @@ export default create<BeutomelloGameState>((set) => {
             }
           }
           const currentOpponent = target > 11 ? playerOrder[state.numberOfPlayers][state.currentPlayer] : undefined
-          beutomelloGameState[state.currentPlayer][state.currentMeeple].currentGameBoardElement = target
-          beutomelloGameState[state.currentPlayer][state.currentMeeple].opponent = currentOpponent
+          beutomelloGameStateCopy[state.currentPlayer][state.currentMeeple].currentGameBoardElement = target
+          beutomelloGameStateCopy[state.currentPlayer][state.currentMeeple].opponent = currentOpponent
 
           /**
            * Get Name of gameBoardElement to move to
            */
-          let gameBoardElementName
-          let targetMapping: {[key: number]: number} = {
-            12: 10,
-            13: 9,
-            14: 8,
-            15: 7,
-            16: 6,
-            17: 5,
-            18: 4,
-            19: 3,
-            20: 2,
-            21: 1,
-          }
-          gameBoardElementName = `${currentOpponent ? currentOpponent : state.currentPlayer}_gameBoardElement${currentOpponent ? targetMapping[target] : target}`
+          const gameBoardElementName = `${currentOpponent ? currentOpponent : state.currentPlayer}_gameBoardElement${currentOpponent ? targetOpponentMapping[target] : target}`
 
           /**
            * Get Mesh Objects
@@ -178,6 +165,57 @@ export default create<BeutomelloGameState>((set) => {
           const gameBoardElement = threeState.scene.getObjectByName(gameBoardElementName)
           const meepleObjectName = `${state.currentPlayer}_${state.currentMeeple}`
           const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
+
+
+          /**
+           * Check if there are other meeples to throw off the board
+           */
+          const throwOpponentMeeples: {
+            [key in PlayerEnum]: Array<MeepleEnum>
+          } = {
+            [PlayerEnum.player1]: [],
+            [PlayerEnum.player2]: [],
+            [PlayerEnum.player3]: [],
+            [PlayerEnum.player4]: [],
+          }
+          for (const playerKey of Object.keys(PlayerEnum)) {
+            if (playerKey === state.currentPlayer) {
+              continue
+            }
+            for (const meepleKey of Object.keys(MeepleEnum)) {
+              const meepleOpponentPlayer = beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].opponent
+              const opponentGameBoardElement = beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].currentGameBoardElement
+              // console.log('meepleKey', meepleKey)
+              // console.log('playerKey', playerKey)
+              // console.log('meepleOpponentPlayer', meepleOpponentPlayer)
+              // console.log('state.currentPlayer', state.currentPlayer)
+              // console.log('currentOpponent', currentOpponent)
+              // console.log('opponentGameBoardElement', opponentGameBoardElement)
+              // console.log('target', target)
+              // console.log('(opponentGameBoardElement > 11 ? targetOpponentMapping[target] : target)', (opponentGameBoardElement > 11 ? targetOpponentMapping[target] : target))
+              // console.log('---')
+
+              /**
+               * Handle case that currentMeeple will move to the currentPlayer's side
+               */
+              if (meepleOpponentPlayer === state.currentPlayer
+                && opponentGameBoardElement === (opponentGameBoardElement > 11 ? targetOpponentMapping[target] : target)
+                ) {
+                throwOpponentMeeples[playerKey as PlayerEnum].push(meepleKey as MeepleEnum)
+              }
+
+              /**
+               * Handle case that currentMeeple will move to the currentOpponent's side
+               */
+              if (playerKey === currentOpponent
+                && opponentGameBoardElement === (target > 11 ? targetOpponentMapping[target] : target)
+                ) {
+                throwOpponentMeeples[playerKey as PlayerEnum].push(meepleKey as MeepleEnum)
+              }
+            }
+          }
+          console.log('throwOpponentMeeples', throwOpponentMeeples)
+
           
           /**
            * Handle Offsets
@@ -187,7 +225,7 @@ export default create<BeutomelloGameState>((set) => {
             if (meepleKey === state.currentMeeple) {
               continue
             }
-            if (beutomelloGameState[state.currentPlayer][meepleKey as MeepleEnum].currentGameBoardElement === target) {
+            if (beutomelloGameStateCopy[state.currentPlayer][meepleKey as MeepleEnum].currentGameBoardElement === target) {
               meeplesOnGameBoardElement += 1
             }
           }
@@ -260,12 +298,6 @@ export default create<BeutomelloGameState>((set) => {
             offsetZ1 = gameBoardElementOffsets[state.currentPlayer][targetSelector]?.z ? gameBoardElementOffsets[state.currentPlayer][targetSelector]?.z : 0
           }
 
-          // console.log('offsetX1', offsetX1)
-          // console.log('offsetZ1', offsetZ1)
-          // console.log('offsetX2', meeplesOnGameBoardElement * (offsetX2 ? offsetX2 : 0))
-          // console.log('offsetZ2', meeplesOnGameBoardElement * (offsetZ2 ? offsetZ2 : 0))
-          // console.log('target', target)
-
           /**
            * Get Positions Vector to move meeple to
            */
@@ -289,7 +321,7 @@ export default create<BeutomelloGameState>((set) => {
             state.nextPlayer()
           }, 2500)
 
-          return { beutomelloGameState, moveMeepleCurve }
+          return { beutomelloGameState: beutomelloGameStateCopy, moveMeepleCurve }
         }
 
         if (steps === 'Kopf') {
