@@ -9,7 +9,7 @@ interface BeutomelloGameState {
   currentOpponent: PlayerEnum | undefined
   setCurrentOpponent: Function
   allowMoveMeeple: boolean
-  beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: GameBoardElementKeyEnum } }
+  beutomelloGameState: { [key in PlayerEnum]: { [key in MeepleEnum]: {currentGameBoardElement: GameBoardElementKeyEnum, opponent: PlayerEnum | undefined} } }
   setAllowMoveMeeple: Function
   moveCurrentMeeple: Function
   selectPlayer: Function
@@ -30,10 +30,10 @@ interface BeutomelloGameState {
 }
 
 const playerInitState = {
-  [MeepleEnum.meeple1]: GameBoardElementKeyEnum.Start,
-  [MeepleEnum.meeple2]: GameBoardElementKeyEnum.Start,
-  [MeepleEnum.meeple3]: GameBoardElementKeyEnum.Start,
-  [MeepleEnum.meeple4]: GameBoardElementKeyEnum.Start,
+  [MeepleEnum.meeple1]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
+  [MeepleEnum.meeple2]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
+  [MeepleEnum.meeple3]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
+  [MeepleEnum.meeple4]: {currentGameBoardElement: GameBoardElementKeyEnum.Start, opponent: undefined},
 }
 
 const cameraPositions = {
@@ -99,10 +99,10 @@ export default create<BeutomelloGameState>((set) => {
     numberOfPlayers: 2,
     moveMeepleCurve: new THREE.CatmullRomCurve3(),
     beutomelloGameState: {
-      [PlayerEnum.player1]: { ...playerInitState },
-      [PlayerEnum.player2]: { ...playerInitState },
-      [PlayerEnum.player3]: { ...playerInitState },
-      [PlayerEnum.player4]: { ...playerInitState },
+      [PlayerEnum.player1]: JSON.parse(JSON.stringify(playerInitState)),
+      [PlayerEnum.player2]: JSON.parse(JSON.stringify(playerInitState)),
+      [PlayerEnum.player3]: JSON.parse(JSON.stringify(playerInitState)),
+      [PlayerEnum.player4]: JSON.parse(JSON.stringify(playerInitState)),
     },
     playerDisplayNames: {
       [PlayerEnum.player1]: 'Beutomello',
@@ -139,18 +139,18 @@ export default create<BeutomelloGameState>((set) => {
          * Get gameBoardElementTarget
          */
           const beutomelloGameState = state.beutomelloGameState
-          const currentGaemBoardElement = beutomelloGameState[state.currentPlayer][state.currentMeeple]
+          const currentGameBoardElement = beutomelloGameState[state.currentPlayer][state.currentMeeple].currentGameBoardElement
           let target
           if (steps === 'Zahl') {
-            target = currentGaemBoardElement * 2
+            target = currentGameBoardElement * 2
           } else {
-            if (currentGaemBoardElement > 11) {
-              target = currentGaemBoardElement - steps
+            if (currentGameBoardElement > 11) {
+              target = currentGameBoardElement - steps
             } else {
-              target = currentGaemBoardElement + steps
+              target = currentGameBoardElement + steps
             }
           }
-          beutomelloGameState[state.currentPlayer][state.currentMeeple] = target
+          beutomelloGameState[state.currentPlayer][state.currentMeeple].currentGameBoardElement = target
 
           /**
            * Get Name of gameBoardElement to move to
@@ -190,7 +190,7 @@ export default create<BeutomelloGameState>((set) => {
             if (meepleKey === state.currentMeeple) {
               continue
             }
-            if (beutomelloGameState[state.currentPlayer][meepleKey as MeepleEnum] === target) {
+            if (beutomelloGameState[state.currentPlayer][meepleKey as MeepleEnum].currentGameBoardElement === target) {
               meeplesOnGameBoardElement += 1
             }
           }

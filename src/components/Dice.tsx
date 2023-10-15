@@ -7,7 +7,7 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
 import { useThree } from '@react-three/fiber'
-import { GameBoardElementKeyEnum, GamePhaseEnum } from "~/utils/enums";
+import { GameBoardElementKeyEnum, GamePhaseEnum, PlayerEnum } from "~/utils/enums";
 
 
 export default function Dice() {
@@ -48,7 +48,7 @@ export default function Dice() {
   let meeplePosition: GameBoardElementKeyEnum | undefined
   let canThrowDice: boolean
   if (currentMeeple) {
-    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple]
+    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple].currentGameBoardElement
   }
 
 
