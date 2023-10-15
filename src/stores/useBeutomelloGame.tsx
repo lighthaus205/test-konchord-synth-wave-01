@@ -150,30 +150,27 @@ export default create<BeutomelloGameState>((set) => {
               target = currentGameBoardElement + steps
             }
           }
+          const currentOpponent = target > 11 ? playerOrder[state.numberOfPlayers][state.currentPlayer] : undefined
           beutomelloGameState[state.currentPlayer][state.currentMeeple].currentGameBoardElement = target
+          beutomelloGameState[state.currentPlayer][state.currentMeeple].opponent = currentOpponent
 
           /**
            * Get Name of gameBoardElement to move to
            */
           let gameBoardElementName
-          if (target > 11) {
-            let targetMapping: {[key: number]: number} = {
-              12: 10,
-              13: 9,
-              14: 8,
-              15: 7,
-              16: 6,
-              17: 5,
-              18: 4,
-              19: 3,
-              20: 2,
-              21: 1,
-            }
-            const currentOpponent = playerOrder[state.numberOfPlayers][state.currentPlayer]
-            gameBoardElementName = `${currentOpponent}_gameBoardElement${targetMapping[target]}`
-          } else {
-            gameBoardElementName = `${state.currentPlayer}_gameBoardElement${target}`
+          let targetMapping: {[key: number]: number} = {
+            12: 10,
+            13: 9,
+            14: 8,
+            15: 7,
+            16: 6,
+            17: 5,
+            18: 4,
+            19: 3,
+            20: 2,
+            21: 1,
           }
+          gameBoardElementName = `${currentOpponent ? currentOpponent : state.currentPlayer}_gameBoardElement${currentOpponent ? targetMapping[target] : target}`
 
           /**
            * Get Mesh Objects
