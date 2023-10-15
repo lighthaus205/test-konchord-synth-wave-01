@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { MeepleEnum, PlayerEnum, GameBoardElementKeyEnum, GamePhaseEnum } from '~/utils/enums'
 import * as THREE from 'three'
-import { gameBoardElementOffsets, meepleAlreadyOnFieldOffsets, targetOpponentMapping } from '~/utils/positions'
+import { gameBoardElementOffsets, initialMeeplePositions, meepleAlreadyOnFieldOffsets, targetOpponentMapping } from '~/utils/positions'
 
-interface BeutomelloGameState {
+interface BeutomelloGameStateInterface {
   currentPlayer: PlayerEnum
   currentMeeple: MeepleEnum | undefined
   currentOpponent: PlayerEnum | undefined
@@ -27,6 +27,11 @@ interface BeutomelloGameState {
   moveMeepleCurve: THREE.CatmullRomCurve3
   setMoveMeepleCurve: Function
   numberOfPlayers: 1 | 2 | 3 | 4
+  throwMeeples: Function
+}
+
+type throwOpponentMeeplesType = {
+  [key in PlayerEnum]: Array<MeepleEnum>
 }
 
 const playerInitState = {
@@ -57,7 +62,7 @@ const coinPositions = {
   [PlayerEnum.player4]: new THREE.Vector3(6, 0, 9),
 }
 
-const playerOrder: {[key in BeutomelloGameState["numberOfPlayers"]]: {[key in PlayerEnum]: PlayerEnum | undefined}} = {
+const playerOrder: {[key in BeutomelloGameStateInterface["numberOfPlayers"]]: {[key in PlayerEnum]: PlayerEnum | undefined}} = {
   1: {
     [PlayerEnum.player1]: PlayerEnum.player1,
     [PlayerEnum.player2]: undefined,
@@ -85,7 +90,7 @@ const playerOrder: {[key in BeutomelloGameState["numberOfPlayers"]]: {[key in Pl
 }
 
 
-export default create<BeutomelloGameState>((set) => {
+export default create<BeutomelloGameStateInterface>((set) => {
   return {
     currentPlayer: PlayerEnum.player1,
     currentMeeple: undefined,
@@ -170,9 +175,7 @@ export default create<BeutomelloGameState>((set) => {
           /**
            * Check if there are other meeples to throw off the board
            */
-          const throwOpponentMeeples: {
-            [key in PlayerEnum]: Array<MeepleEnum>
-          } = {
+          const throwOpponentMeeples: throwOpponentMeeplesType = {
             [PlayerEnum.player1]: [],
             [PlayerEnum.player2]: [],
             [PlayerEnum.player3]: [],
@@ -215,6 +218,10 @@ export default create<BeutomelloGameState>((set) => {
             }
           }
           console.log('throwOpponentMeeples', throwOpponentMeeples)
+          setTimeout(() => {
+            state.throwMeeples(throwOpponentMeeples, threeState)
+          }, 2200)
+          
 
           
           /**
@@ -390,6 +397,33 @@ export default create<BeutomelloGameState>((set) => {
     ) => {
       set((state) => {
         return { currentOpponent }
+      })
+    },
+    throwMeeples: (
+      throwOpponentMeeples: throwOpponentMeeplesType,
+      threeState: any
+    ) => {
+      set((state) => {
+        const beutomelloGameStateCopy = JSON.parse(JSON.stringify(state.beutomelloGameState))
+        for (const playerKey of Object.keys(throwOpponentMeeples)) {
+          for (const meepleKey of throwOpponentMeeples[playerKey as PlayerEnum]) {
+            const meepleObjectName = `${playerKey}_${meepleKey}`
+            const meepleObject = threeState.scene.getObjectByName(meepleObjectName)
+            const positionX = initialMeeplePositions[meepleKey as MeepleEnum].x
+            const positionZ = initialMeeplePositions[meepleKey as MeepleEnum].z
+            const positionVector = [
+              playerKey === PlayerEnum.player2 || playerKey === PlayerEnum.player1 ? -positionX : positionX,
+              0.4,
+              playerKey === PlayerEnum.player3 || playerKey === PlayerEnum.player2 ? -positionZ : positionZ,
+            ]
+            meepleObject.position.set(positionVector)
+            
+            beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].currentGameBoardElement = GameBoardElementKeyEnum.Start
+            beutomelloGameStateCopy[playerKey as PlayerEnum][meepleKey as MeepleEnum].opponent = undefined
+          }
+        }
+
+        return { beutomelloGameState: beutomelloGameStateCopy }
       })
     }
   }
