@@ -325,10 +325,10 @@ export default create<BeutomelloGameStateInterface>((set) => {
           ]);
 
           setTimeout(() => {
-            state.nextPlayer()
+            state.nextPlayer(beutomelloGameStateCopy)
           }, 2500)
 
-          return { beutomelloGameState: beutomelloGameStateCopy, moveMeepleCurve }
+          return { moveMeepleCurve }
         }
 
         if (steps === 'Kopf') {
@@ -347,11 +347,14 @@ export default create<BeutomelloGameStateInterface>((set) => {
           cameraPosition: cameraPositions[player],
           dicePosition: dicePositions[player],
           coinPosition: coinPositions[player],
-          currentPlayer: player
+          currentPlayer: player,
+          currentMeeple: undefined,
         }
       })
     },
-    nextPlayer: () => {
+    nextPlayer: (
+      beutomelloGameState: BeutomelloGameStateInterface["beutomelloGameState"]
+    ) => {
       set((state) => {
         state.setGamePhase(GamePhaseEnum.switchPlayer)
         const currentPlayer = state.currentPlayer
@@ -361,7 +364,10 @@ export default create<BeutomelloGameStateInterface>((set) => {
           state.setGamePhase(GamePhaseEnum.selectMeeple)
         }, 1000)
 
-        return { currentMeeple: undefined }
+        if (beutomelloGameState) {
+          return { beutomelloGameState }
+        }
+        return {}
       })
     },
     selectMeeple: (
