@@ -16,12 +16,12 @@ export default function Dice() {
   /**
    * Textures
    */
-  const dice_texture_1 = useLoader(TextureLoader, 'dice_textures/1.jpg')
-  const dice_texture_2 = useLoader(TextureLoader, 'dice_textures/2.jpg')
-  const dice_texture_3 = useLoader(TextureLoader, 'dice_textures/3.jpg')
-  const dice_texture_4 = useLoader(TextureLoader, 'dice_textures/4.jpg')
-  const dice_texture_5 = useLoader(TextureLoader, 'dice_textures/5.jpg')
-  const dice_texture_6 = useLoader(TextureLoader, 'dice_textures/6.jpg')
+  const dice_texture_1 = useLoader(TextureLoader, '/dice_textures/1.jpg')
+  const dice_texture_2 = useLoader(TextureLoader, '/dice_textures/2.jpg')
+  const dice_texture_3 = useLoader(TextureLoader, '/dice_textures/3.jpg')
+  const dice_texture_4 = useLoader(TextureLoader, '/dice_textures/4.jpg')
+  const dice_texture_5 = useLoader(TextureLoader, '/dice_textures/5.jpg')
+  const dice_texture_6 = useLoader(TextureLoader, '/dice_textures/6.jpg')
 
   /**
    * Define Refs
