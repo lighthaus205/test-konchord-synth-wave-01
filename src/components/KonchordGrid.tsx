@@ -1,5 +1,5 @@
 export default function KonchordGrid() {
   return <>
-    <gridHelper args={[100, 100, 0xff0000, 0xff0000]} />
+    <gridHelper args={[1000, 500, 0xff0000, 0xff0000]} />
   </>
 }

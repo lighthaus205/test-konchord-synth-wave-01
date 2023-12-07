@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useLoader } from "@react-three/fiber"
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader"
@@ -9,10 +9,13 @@ import * as THREE from 'three'
 
 export default function KonchordSpaceship() {
   const fileUrl = "/konchord-spaceship/konchord_spaceship.stl"
-  const konchordSpaceship = useRef<RapierRigidBody>(null!)
+  const konchordSpaceshipRef = useRef<RapierRigidBody>(null!)
   const geom = useLoader(STLLoader, fileUrl)
 
   const [subscribeKeys, getKeys] = useKeyboardControls()
+
+  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
+  const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
 
   useEffect(() => {
     /*
@@ -39,6 +42,32 @@ export default function KonchordSpaceship() {
     }
     */
   })
+
+  const stopSpaceship = () => {
+    const impulse = { x: 0, y: 0, z: 0 }
+    konchordSpaceshipRef.current.setLinvel(impulse, true)
+    konchordSpaceshipRef.current.setEnabled(false)
+    // let factor = 20
+    // let i = 0
+    // let maxI = 10
+    // for (i; i < maxI; i++) {
+    //   setTimeout(() => {
+    //     if (i === maxI) {
+    //       console.log('STOP!!!')
+    //     } else {
+    //       let velocity = konchordSpaceshipRef.current.linvel()
+    //       console.log('velocity', velocity)
+    //       let impulse = {
+    //         x: -velocity.x / factor,
+    //         y: -velocity.y / factor,
+    //         z: -velocity.z / factor,
+    //       }
+    //       console.log('Applying impulse...', impulse)
+    //       konchordSpaceshipRef.current.applyImpulse(impulse, true)
+    //     }
+    //   }, 100 * i)
+    // }
+  }
 
   useFrame((state, delta) => {
     /**
@@ -72,13 +101,13 @@ export default function KonchordSpaceship() {
       torque.z -= torqueStrength
     }
 
-    konchordSpaceship.current.applyImpulse(impulse, true)
+    konchordSpaceshipRef.current.applyImpulse(impulse, true)
     // konchordSpaceship.current.applyTorqueImpulse(torque, true)
 
     /**
      * Camera
      */
-    const bodyPosition = konchordSpaceship.current.translation()
+    const bodyPosition = konchordSpaceshipRef.current.translation()
     const cameraPosition = new THREE.Vector3()
     cameraPosition.x = bodyPosition.x
     cameraPosition.z = bodyPosition.z + 4
@@ -86,11 +115,11 @@ export default function KonchordSpaceship() {
 
     const cameraTarget = new THREE.Vector3()
     cameraTarget.x += bodyPosition.x
-    cameraTarget.y += bodyPosition.y + 0.25
+    cameraTarget.y += bodyPosition.y + 1.5
     cameraTarget.z += bodyPosition.z
 
-    // smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
-    // smoothedCameraTarget.lerp(cameraTarget, 7 * delta)
+    smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
+    smoothedCameraTarget.lerp(cameraTarget, 7 * delta)
 
     state.camera.position.copy(cameraPosition)
     state.camera.lookAt(cameraTarget)
@@ -99,13 +128,18 @@ export default function KonchordSpaceship() {
   return (
     <>
       <RigidBody
-        ref={konchordSpaceship}
+        ref={konchordSpaceshipRef}
         restitution={0.2}
         friction={1}
-        scale={0.02}
+        scale={0.01}
         rotation={[- Math.PI / 2, 0, 0]}
-        position={[0, 1, 0]}
+        position={[0, 10, 0]}
         gravityScale={0}
+        onIntersectionEnter={(payload) => {
+          console.log('Intersection Spaceship!')
+          console.log(payload)
+          stopSpaceship()
+        }}
       >
         <mesh>
           <primitive
@@ -117,7 +151,6 @@ export default function KonchordSpaceship() {
           />
         </mesh>
       </RigidBody>
-
     </>
   );
 }

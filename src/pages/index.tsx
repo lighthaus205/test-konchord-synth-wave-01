@@ -27,7 +27,7 @@ export default function Home() {
             camera={{
               fov: 75,
               near: 0.01,
-              far: 200,
+              far: 1000,
               position: [0, 12, -12]
             }}
           >
