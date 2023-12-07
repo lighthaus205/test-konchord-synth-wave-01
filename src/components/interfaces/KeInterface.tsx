@@ -17,9 +17,7 @@ export default function KeInterface() {
 
   const onSubmitEnterPlanet = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('bool', enterPlanet == 'yes')
     if (enterPlanet == 'yes') {
-      console.log('redirecting...')
       push(enterPlanetData.redirect_url)
 
     } else if (enterPlanet == 'no') {
@@ -30,7 +28,7 @@ export default function KeInterface() {
   return <div className="interface">
     {kePhase === kePhaseEnum.askingToEnterPlanet ? <>
       <div className="askingToEnterPlanet">
-        <h1>Do you want to enter planet {enterPlanetData.name}?</h1>
+        <h1>Do you want to enter planet {enterPlanetData.planet_name}?</h1>
         <form id="quizForm" onSubmit={onSubmitEnterPlanet}>
           <div>
             <input

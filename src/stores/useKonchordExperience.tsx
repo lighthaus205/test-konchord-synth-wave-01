@@ -2,12 +2,7 @@ import { RapierRigidBody } from '@react-three/rapier'
 import { create } from 'zustand'
 import { kePhaseEnum } from '~/utils/enums'
 import { RefObject } from 'react'
-
-interface enterPlanetDataInterface {
-  key: string
-  name: string
-  redirect_url: string
-}
+import { planetDataInterface } from '~/utils/interfaces'
 
 interface KonchordExperienceStateInterface {
   konchordSpaceshipRef: RefObject<RapierRigidBody> | null
@@ -15,7 +10,7 @@ interface KonchordExperienceStateInterface {
   kePhase: kePhaseEnum
   askToEnterPlanet: Function
   continueExploring: Function
-  enterPlanetData: enterPlanetDataInterface
+  enterPlanetData: planetDataInterface
 }
 
 
@@ -32,11 +27,11 @@ export default create<KonchordExperienceStateInterface>((set) => {
     },
     kePhase: kePhaseEnum.exploring,
     enterPlanetData: {
-      key: '',
-      name: '',
+      planet_key: '',
+      planet_name: '',
       redirect_url: '',
     },
-    askToEnterPlanet: (enterPlanetData: enterPlanetDataInterface) => {
+    askToEnterPlanet: (enterPlanetData: planetDataInterface) => {
       set((state) => {
         return {
           enterPlanetData: enterPlanetData,

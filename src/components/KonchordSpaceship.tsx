@@ -108,7 +108,7 @@ export default function KonchordSpaceship() {
       torque.z -= torqueStrength
     }
 
-    konchordSpaceshipRef.current.applyImpulse(impulse, true)
+    konchordSpaceshipRef.current?.applyImpulse(impulse, true)
     // konchordSpaceship.current.applyTorqueImpulse(torque, true)
 
     /**
