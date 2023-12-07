@@ -102,8 +102,8 @@ export default function KonchordSpaceship() {
         ref={konchordSpaceship}
         restitution={0.2}
         friction={1}
-        scale={0.03}
-        rotation={[Math.PI / 2, Math.PI, 0]}
+        scale={0.02}
+        rotation={[- Math.PI / 2, 0, 0]}
         position={[0, 1, 0]}
         gravityScale={0}
       >
