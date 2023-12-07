@@ -22,10 +22,18 @@ export default function TestPlanet() {
       position={[0, 10, -100]}
       gravityScale={0}
       type="fixed"
+      userData={{
+        key: 'test_planet',
+        redirect_url: 'planets/start-again',
+        name: 'Test Planet'
+      }}
     >
       <BallCollider
         args={[3]}
         sensor
+      />
+      <BallCollider
+        args={[2.95]}
       />
       <mesh ref={sunRef}>
         <sphereGeometry />

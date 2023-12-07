@@ -33,6 +33,22 @@ body,
 }
 
 /**
+ * Interface askingToEnterPlanet
+ */
+ .interface .askingToEnterPlanet {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    padding-top: 5px;
+    text-align: center;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/**
  * Interface currentPlayer
  */
 .interface .currentPlayer {

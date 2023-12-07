@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useLoader } from "@react-three/fiber"
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader"
-import { RigidBody, RapierRigidBody } from '@react-three/rapier'
+import { RigidBody, RapierRigidBody, vec3 } from '@react-three/rapier'
 import { useKeyboardControls } from '@react-three/drei'
 import * as THREE from 'three'
+import useKonchordExperience from '~/stores/useKonchordExperience'
 
 
 export default function KonchordSpaceship() {
@@ -17,6 +18,12 @@ export default function KonchordSpaceship() {
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
 
+  const askToEnterPlanet = useKonchordExperience((state) => state.askToEnterPlanet)
+  const konchordSpaceshipRefStore = useKonchordExperience((state) => state.konchordSpaceshipRef)
+  const setKonchordSpaceshipRef = useKonchordExperience((state) => state.setKonchordSpaceshipRef)
+  if (!konchordSpaceshipRefStore) {
+    setKonchordSpaceshipRef(konchordSpaceshipRef)
+  }
   useEffect(() => {
     /*
     const unsubscribeReset = useGame.subscribe((state) => state.phase, (value) => {
@@ -136,9 +143,12 @@ export default function KonchordSpaceship() {
         position={[0, 10, 0]}
         gravityScale={0}
         onIntersectionEnter={(payload) => {
-          console.log('Intersection Spaceship!')
-          console.log(payload)
-          stopSpaceship()
+          let enterPlanetData = payload.other.rigidBodyObject?.userData
+          let velocity = vec3(konchordSpaceshipRef.current.linvel())
+          if (velocity.length() > 0.0001) {
+            stopSpaceship()
+            askToEnterPlanet(enterPlanetData)
+          }
         }}
       >
         <mesh>

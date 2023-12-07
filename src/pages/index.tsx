@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, KeyboardControls } from '@react-three/drei'
 import KonchordExperience from "~/components/KonchordExperience";
-
+import KeInterface from "~/components/interfaces/KeInterface";
 
 export default function Home() {
   return (
@@ -40,6 +40,7 @@ export default function Home() {
 
             <KonchordExperience />
           </Canvas>
+          <KeInterface />
         </KeyboardControls>
       </main>
     </>
