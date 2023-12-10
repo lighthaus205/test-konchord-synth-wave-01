@@ -54,7 +54,7 @@ export default function Planet({
         sensor
       />
       <BallCollider
-        args={[2.95]}
+        args={[2.9]}
       />
       <mesh ref={sunRef}>
         <sphereGeometry />
