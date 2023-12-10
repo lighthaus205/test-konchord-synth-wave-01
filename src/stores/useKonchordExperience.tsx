@@ -20,7 +20,7 @@ export default create<KonchordExperienceStateInterface>((set) => {
     setKonchordSpaceshipRef: (konchordSpaceshipRef: RefObject<RapierRigidBody>) => {
       set((state) => {
         if (state.konchordSpaceshipRef === null) {
-          return {konchordSpaceshipRef: konchordSpaceshipRef}
+          return { konchordSpaceshipRef: konchordSpaceshipRef }
         }
         return {}
       })
@@ -42,7 +42,7 @@ export default create<KonchordExperienceStateInterface>((set) => {
     continueExploring: () => {
       set((state) => {
         state.konchordSpaceshipRef?.current?.setEnabled(true)
-        return {kePhase: kePhaseEnum.exploring}
+        return { kePhase: kePhaseEnum.exploring }
       })
     },
   }

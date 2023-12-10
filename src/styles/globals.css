@@ -10,8 +10,12 @@ body,
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+#main {
     background: url("/konchord-background-65.jpg") no-repeat center center fixed;
     background-size: cover;
+    z-index: 100;
 }
 
 @font-face {
@@ -62,6 +66,22 @@ body,
     text-align: center;
     pointer-events: auto;
     cursor: pointer;
+}
+
+.joystick_zone {
+    position: absolute;
+    bottom: 0;
+    width: 50%;
+    height: 200px;
+    font-family: 'Anton', sans-serif;
+    z-index: 1000;
+}
+
+#joystick_zone_1 {
+    left: 0;
+}
+#joystick_zone_2 {
+    right: 0;
 }
 
 /**

@@ -6,6 +6,7 @@ import { RigidBody, RapierRigidBody, vec3 } from '@react-three/rapier'
 import { useKeyboardControls } from '@react-three/drei'
 import * as THREE from 'three'
 import useKonchordExperience from '~/stores/useKonchordExperience'
+import useMobileJoystick from '~/stores/useMobileJoystick'
 
 
 export default function KonchordSpaceship() {
@@ -14,6 +15,9 @@ export default function KonchordSpaceship() {
   const geom = useLoader(STLLoader, fileUrl)
 
   const [subscribeKeys, getKeys] = useKeyboardControls()
+  const joystickDistance = useMobileJoystick((state) => state.distance)
+  const joystickDirection = useMobileJoystick((state) => state.direction)
+  const isTouchDevice = useMobileJoystick((state) => state.isTouchDevice)
 
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
@@ -24,6 +28,7 @@ export default function KonchordSpaceship() {
   if (!konchordSpaceshipRefStore) {
     setKonchordSpaceshipRef(konchordSpaceshipRef)
   }
+
   useEffect(() => {
     /*
     const unsubscribeReset = useGame.subscribe((state) => state.phase, (value) => {
@@ -52,8 +57,8 @@ export default function KonchordSpaceship() {
 
   const stopSpaceship = () => {
     const impulse = { x: 0, y: 0, z: 0 }
-    konchordSpaceshipRef.current.setLinvel(impulse, true)
-    konchordSpaceshipRef.current.setEnabled(false)
+    konchordSpaceshipRef.current?.setLinvel(impulse, true)
+    konchordSpaceshipRef.current?.setEnabled(false)
     // let factor = 20
     // let i = 0
     // let maxI = 10
@@ -77,35 +82,44 @@ export default function KonchordSpaceship() {
   }
 
   useFrame((state, delta) => {
-    /**
-     * Controls
-     */
-    const { forward, backward, leftward, rightward } = getKeys()
 
     const impulse = { x: 0, y: 0, z: 0 }
-    const torque = { x: 0, y: 0, z: 0 }
+    const impulseStrength = 1 * delta
 
-    const impulseStrength = 5 * delta
-    const torqueStrength = 0.2 * delta
+    if (isTouchDevice) {
+      if (joystickDirection && joystickDirection.angle === 'up') {
+        impulse.z -= impulseStrength * (joystickDistance / 50)
+      }
 
-    if (forward) {
-      impulse.z -= impulseStrength
-      torque.x -= torqueStrength
-    }
+      if (joystickDirection && joystickDirection.angle === 'down') {
+        impulse.z = impulseStrength * (joystickDistance / 50)
+      }
 
-    if (backward) {
-      impulse.z = impulseStrength
-      torque.x = torqueStrength
-    }
+      if (joystickDirection && joystickDirection.angle === 'left') {
+        impulse.x -= impulseStrength * (joystickDistance / 50)
+      }
 
-    if (leftward) {
-      impulse.x -= impulseStrength
-      torque.z = torqueStrength
-    }
+      if (joystickDirection && joystickDirection.angle === 'right') {
+        impulse.x = impulseStrength * (joystickDistance / 50)
+      }
+    } else {
+      const { forward, backward, leftward, rightward } = getKeys()
 
-    if (rightward) {
-      impulse.x = impulseStrength
-      torque.z -= torqueStrength
+      if (forward) {
+        impulse.z -= impulseStrength
+      }
+
+      if (backward) {
+        impulse.z = impulseStrength
+      }
+
+      if (leftward) {
+        impulse.x -= impulseStrength
+      }
+
+      if (rightward) {
+        impulse.x = impulseStrength
+      }
     }
 
     konchordSpaceshipRef.current?.applyImpulse(impulse, true)
@@ -114,7 +128,7 @@ export default function KonchordSpaceship() {
     /**
      * Camera
      */
-    const bodyPosition = konchordSpaceshipRef.current.translation()
+    const bodyPosition = konchordSpaceshipRef.current?.translation()
     const cameraPosition = new THREE.Vector3()
     cameraPosition.x = bodyPosition.x
     cameraPosition.z = bodyPosition.z + 4
