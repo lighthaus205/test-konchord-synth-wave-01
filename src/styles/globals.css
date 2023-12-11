@@ -71,17 +71,18 @@ body,
 .joystick_zone {
     position: absolute;
     bottom: 0;
-    width: 50%;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     font-family: 'Anton', sans-serif;
     z-index: 1000;
+    bottom: 10px;
 }
 
 #joystick_zone_1 {
-    left: 0;
+    left: 20px;
 }
 #joystick_zone_2 {
-    right: 0;
+    right: 20px;
 }
 
 /**

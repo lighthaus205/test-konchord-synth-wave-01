@@ -8,17 +8,16 @@ export default function MobileJoystick() {
     dynamicPage: true,
     size: 100,
     mode: 'static',
-    color: '#ffcc02'
+    color: '#ffcc02',
+    position: { left: '50%', bottom: '50%' },
   }
   const options1 = {
     ...options,
     zone: document.getElementById('joystick_zone_1')!,
-    position: { left: '100px', bottom: '74px' }
   }
   const options2 = {
     ...options,
     zone: document.getElementById('joystick_zone_2')!,
-    position: { right: '100px', bottom: '74px' }
   }
   var manager1 = nipplejs.create(options1);
   var manager2 = nipplejs.create(options2);
