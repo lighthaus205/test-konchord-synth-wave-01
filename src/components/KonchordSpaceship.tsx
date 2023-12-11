@@ -130,14 +130,17 @@ export default function KonchordSpaceship() {
 
     const bodyPosition = konchordSpaceshipRef.current?.translation()
     const cameraPosition = new THREE.Vector3()
-    cameraPosition.x = bodyPosition.x
-    cameraPosition.y = bodyPosition.y + 2
-    cameraPosition.z = bodyPosition.z + 4
-
     const cameraTarget = new THREE.Vector3()
-    cameraTarget.x += bodyPosition.x
-    cameraTarget.y += bodyPosition.y + 1.5
-    cameraTarget.z += bodyPosition.z
+
+    if (bodyPosition) {
+      cameraPosition.x = bodyPosition.x
+      cameraPosition.y = bodyPosition.y + 2
+      cameraPosition.z = bodyPosition.z + 4
+
+      cameraTarget.x += bodyPosition.x
+      cameraTarget.y += bodyPosition.y + 1.5
+      cameraTarget.z += bodyPosition.z
+    }
 
     smoothedCameraPosition.lerp(cameraPosition, 7 * delta)
     smoothedCameraTarget.lerp(cameraTarget, 7 * delta)

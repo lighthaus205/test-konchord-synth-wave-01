@@ -68,12 +68,5 @@ export default function MobileJoystick() {
     setAngle('right', data.angle)
     setDirection('right', data.direction)
   })
-
-  const setIsTouchDevice = useMobileJoystick((state) => state.setIsTouchDevice)
-  const isTouchDevice = (('ontouchstart' in window) ||
-    (navigator.maxTouchPoints > 0))
-  setIsTouchDevice(isTouchDevice)
-
-  return <>
-  </>
+  return <></>
 }
