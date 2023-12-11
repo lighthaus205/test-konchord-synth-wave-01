@@ -15,8 +15,8 @@ export default function KonchordSpaceship() {
   const geom = useLoader(STLLoader, fileUrl)
 
   const [subscribeKeys, getKeys] = useKeyboardControls()
-  const joystickDistance = useMobileJoystick((state) => state.distance)
-  const joystickDirection = useMobileJoystick((state) => state.direction)
+  const joystickDistanceL = useMobileJoystick((state) => state.distance_l)
+  const joystickDirectionL = useMobileJoystick((state) => state.direction_l)
   const isTouchDevice = useMobileJoystick((state) => state.isTouchDevice)
 
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
@@ -82,25 +82,24 @@ export default function KonchordSpaceship() {
   }
 
   useFrame((state, delta) => {
-
     const impulse = { x: 0, y: 0, z: 0 }
     const impulseStrength = 1 * delta
 
     if (isTouchDevice) {
-      if (joystickDirection && joystickDirection.angle === 'up') {
-        impulse.z -= impulseStrength * (joystickDistance / 50)
+      if (joystickDirectionL && joystickDirectionL.angle === 'up') {
+        impulse.z -= impulseStrength * (joystickDistanceL / 50)
       }
 
-      if (joystickDirection && joystickDirection.angle === 'down') {
-        impulse.z = impulseStrength * (joystickDistance / 50)
+      if (joystickDirectionL && joystickDirectionL.angle === 'down') {
+        impulse.z = impulseStrength * (joystickDistanceL / 50)
       }
 
-      if (joystickDirection && joystickDirection.angle === 'left') {
-        impulse.x -= impulseStrength * (joystickDistance / 50)
+      if (joystickDirectionL && joystickDirectionL.angle === 'left') {
+        impulse.x -= impulseStrength * (joystickDistanceL / 50)
       }
 
-      if (joystickDirection && joystickDirection.angle === 'right') {
-        impulse.x = impulseStrength * (joystickDistance / 50)
+      if (joystickDirectionL && joystickDirectionL.angle === 'right') {
+        impulse.x = impulseStrength * (joystickDistanceL / 50)
       }
     } else {
       const { forward, backward, leftward, rightward } = getKeys()
@@ -128,11 +127,12 @@ export default function KonchordSpaceship() {
     /**
      * Camera
      */
+
     const bodyPosition = konchordSpaceshipRef.current?.translation()
     const cameraPosition = new THREE.Vector3()
     cameraPosition.x = bodyPosition.x
-    cameraPosition.z = bodyPosition.z + 4
     cameraPosition.y = bodyPosition.y + 2
+    cameraPosition.z = bodyPosition.z + 4
 
     const cameraTarget = new THREE.Vector3()
     cameraTarget.x += bodyPosition.x
@@ -165,7 +165,10 @@ export default function KonchordSpaceship() {
           }
         }}
       >
-        <mesh>
+        <mesh
+          receiveShadow
+          castShadow
+        >
           <primitive
             object={geom}
             attach="geometry"

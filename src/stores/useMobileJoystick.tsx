@@ -1,13 +1,17 @@
 import { create } from 'zustand'
 
 interface useMobileJoystickStateInterface {
-  position: { x: number, y: number }
+  position_l: { x: number, y: number }
+  position_r: { x: number, y: number }
   setPosition: Function
-  distance: number
+  distance_l: number
+  distance_r: number
   setDistance: Function
-  angle: { radian: number, degree: number }
+  angle_l: { radian: number, degree: number }
+  angle_r: { radian: number, degree: number }
   setAngle: Function
-  direction: { x: string, y: string, angle: string }
+  direction_l: { x: string, y: string, angle: string }
+  direction_r: { x: string, y: string, angle: string }
   setDirection: Function
   isTouchDevice: boolean
   setIsTouchDevice: Function
@@ -15,28 +19,52 @@ interface useMobileJoystickStateInterface {
 
 export default create<useMobileJoystickStateInterface>((set) => {
   return {
-    position: { x: 0, y: 0 },
-    setPosition: (position: { x: number, y: number }) => {
+    position_l: { x: 0, y: 0 },
+    position_r: { x: 0, y: 0 },
+    setPosition: (joystickId: 'left' | 'right', position: { x: number, y: number }) => {
       set((state) => {
-        return { position }
+        if (joystickId === 'left') {
+          return { position_l: position }
+        } else if (joystickId === 'right') {
+          return { position_r: position }
+        }
+        return {}
       })
     },
-    distance: 0,
-    setDistance: (distance: number) => {
+    distance_l: 0,
+    distance_r: 0,
+    setDistance: (joystickId: 'left' | 'right', distance: number) => {
       set((state) => {
-        return { distance }
+        if (joystickId === 'left') {
+          return { distance_l: distance }
+        } else if (joystickId === 'right') {
+          return { distance_r: distance }
+        }
+        return {}
       })
     },
-    angle: { radian: 0, degree: 0 },
-    setAngle: (angle: { radian: number, degree: number }) => {
+    angle_l: { radian: 0, degree: 0 },
+    angle_r: { radian: 0, degree: 0 },
+    setAngle: (joystickId: 'left' | 'right', angle: { radian: number, degree: number }) => {
       set((state) => {
-        return { angle }
+        if (joystickId === 'left') {
+          return { angle_l: angle }
+        } else if (joystickId === 'right') {
+          return { angle_r: angle }
+        }
+        return {}
       })
     },
-    direction: { x: '', y: '', angle: '' },
-    setDirection: (direction: { x: string, y: string, angle: string }) => {
+    direction_l: { x: '', y: '', angle: '' },
+    direction_r: { x: '', y: '', angle: '' },
+    setDirection: (joystickId: 'left' | 'right', direction: { x: string, y: string, angle: string }) => {
       set((state) => {
-        return { direction }
+        if (joystickId === 'left') {
+          return { direction_l: direction }
+        } else if (joystickId === 'right') {
+          return { direction_r: direction }
+        }
+        return {}
       })
     },
     isTouchDevice: false,

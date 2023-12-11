@@ -29,24 +29,45 @@ export default function MobileJoystick() {
   const setDirection = useMobileJoystick((state) => state.setDirection)
 
   manager1.on('start', (evt, data) => {
-    setPosition(data.position)
-    setDistance(data.distance)
-    setAngle(data.angle)
-    setDirection(data.direction)
+    setPosition('left', data.position)
+    setDistance('left', data.distance)
+    setAngle('left', data.angle)
+    setDirection('left', data.direction)
   })
 
   manager1.on('end', (evt, data) => {
-    setPosition(data.position)
-    setDistance(data.distance)
-    setAngle(data.angle)
-    setDirection(data.direction)
+    setPosition('left', data.position)
+    setDistance('left', data.distance)
+    setAngle('left', data.angle)
+    setDirection('left', data.direction)
   })
 
   manager1.on('move', (evt, data) => {
-    setPosition(data.position)
-    setDistance(data.distance)
-    setAngle(data.angle)
-    setDirection(data.direction)
+    setPosition('left', data.position)
+    setDistance('left', data.distance)
+    setAngle('left', data.angle)
+    setDirection('left', data.direction)
+  })
+
+  manager2.on('start', (evt, data) => {
+    setPosition('right', data.position)
+    setDistance('right', data.distance)
+    setAngle('right', data.angle)
+    setDirection('right', data.direction)
+  })
+
+  manager2.on('end', (evt, data) => {
+    setPosition('right', data.position)
+    setDistance('right', data.distance)
+    setAngle('right', data.angle)
+    setDirection('right', data.direction)
+  })
+
+  manager2.on('move', (evt, data) => {
+    setPosition('right', data.position)
+    setDistance('right', data.distance)
+    setAngle('right', data.angle)
+    setDirection('right', data.direction)
   })
 
   const setIsTouchDevice = useMobileJoystick((state) => state.setIsTouchDevice)
