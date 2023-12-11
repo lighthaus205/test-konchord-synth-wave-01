@@ -50,7 +50,7 @@ export default function Home() {
               position: [0, 12, -12]
             }}
           >
-            <axesHelper args={[12]} />
+            {/* <axesHelper args={[12]} /> */}
 
             {/* <OrbitControls
               makeDefault

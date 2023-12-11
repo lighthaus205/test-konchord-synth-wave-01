@@ -8,7 +8,7 @@ import * as THREE from 'three'
 
 export default function KonchordExperience() {
   return <>
-    <Physics debug>
+    <Physics >
       <Lights />
       <KonchordGrid />
       <KonchordSpaceship />
