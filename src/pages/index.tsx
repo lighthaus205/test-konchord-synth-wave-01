@@ -18,8 +18,6 @@ const IsTouchDevice = dynamic(
 )
 
 export default function Home() {
-  const isTouchDevice = useMobileJoystick((state) => state.isTouchDevice)
-
   return (
     <>
       <Head>
@@ -29,11 +27,9 @@ export default function Home() {
       </Head>
 
       <IsTouchDevice />
-      {isTouchDevice ? <>
-        <div className="joystick_zone" id="joystick_zone_1"></div>
-        <div className="joystick_zone" id="joystick_zone_2"></div>
-        <MobileJoystick />
-      </> : null}
+      <div className="joystick_zone" id="joystick_zone_1"></div>
+      <div className="joystick_zone" id="joystick_zone_2"></div>
+      <MobileJoystick />
 
       <main id="main">
         <KeyboardControls
