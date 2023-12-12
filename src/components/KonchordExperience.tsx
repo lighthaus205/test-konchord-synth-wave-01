@@ -7,6 +7,7 @@ import * as THREE from 'three'
 
 
 export default function KonchordExperience() {
+  console.log('render KonchordExperience')
   return <>
     <Physics >
       <Lights />

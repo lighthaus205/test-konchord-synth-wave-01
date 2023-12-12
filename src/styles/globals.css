@@ -15,7 +15,6 @@ body,
 #main {
     background: url("/konchord-background-65.jpg") no-repeat center center fixed;
     background-size: cover;
-    z-index: 100;
 }
 
 @font-face {
@@ -31,9 +30,10 @@ body,
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 50%;
     pointer-events: none;
     font-family: 'Anton', sans-serif;
+    z-index: 10;
 }
 
 /**
@@ -83,6 +83,31 @@ body,
 }
 #joystick_zone_2 {
     right: 20px;
+}
+
+.audioInterface {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    font-family: 'Anton', sans-serif;
+    z-index: 10;
+}
+
+.audioInterface .playMusicWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 16px;
+}
+
+.audioInterface .playMusicWrapper .playMusic {
+    display: flex;
+    justify-content: center;
+    color: white;
 }
 
 /**

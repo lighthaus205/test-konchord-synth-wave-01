@@ -4,18 +4,24 @@ import { OrbitControls, KeyboardControls } from '@react-three/drei'
 import KonchordExperience from "~/components/KonchordExperience";
 import KeInterface from "~/components/interfaces/KeInterface";
 import dynamic from 'next/dynamic'
-import useMobileJoystick from "~/stores/useMobileJoystick";
+import { Perf } from 'r3f-perf'
 
 
 const MobileJoystick = dynamic(
-  () => import("../components/interfaces/MobileJoystick"),
+  () => import("~/components/interfaces/MobileJoystick"),
   { ssr: false }
 )
 
 const IsTouchDevice = dynamic(
-  () => import("../components/IsTouchDevice"),
+  () => import("~/components/IsTouchDevice"),
   { ssr: false }
 )
+
+const AudioPlayer = dynamic(
+  () => import("~/components/AudioPlayer"),
+  { ssr: false }
+)
+
 
 export default function Home() {
   return (
@@ -26,12 +32,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <IsTouchDevice />
-      <div className="joystick_zone" id="joystick_zone_1"></div>
-      <div className="joystick_zone" id="joystick_zone_2"></div>
-      <MobileJoystick />
-
       <main id="main">
+        <IsTouchDevice />
+        <div className="joystick_zone" id="joystick_zone_1"></div>
+        <div className="joystick_zone" id="joystick_zone_2"></div>
+        <MobileJoystick />
+
+        <AudioPlayer />
+
+        <KeInterface />
         <KeyboardControls
           map={[
             { name: 'forward', keys: ['ArrowUp', 'KeyW'] },
@@ -50,6 +59,7 @@ export default function Home() {
               position: [0, 12, -12]
             }}
           >
+            {/* <Perf /> */}
             {/* <axesHelper args={[12]} /> */}
 
             {/* <OrbitControls
@@ -59,7 +69,6 @@ export default function Home() {
 
             <KonchordExperience />
           </Canvas>
-          <KeInterface />
         </KeyboardControls>
       </main>
     </>
