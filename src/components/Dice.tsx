@@ -7,7 +7,7 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { isZero, isHalfPi, isMinusHalfPi, isPiOrMinusPi } from "~/utils/mathHelpers";
 import useBeutomelloGame from "~/stores/useBeutomelloGame";
 import { useThree } from '@react-three/fiber'
-import { GameBoardElementKeyEnum, GamePhaseEnum } from "~/utils/enums";
+import { GameBoardElementKeyEnum, GamePhaseEnum, PlayerEnum } from "~/utils/enums";
 
 
 export default function Dice() {
@@ -16,12 +16,12 @@ export default function Dice() {
   /**
    * Textures
    */
-  const dice_texture_1 = useLoader(TextureLoader, 'dice_textures/1.jpg')
-  const dice_texture_2 = useLoader(TextureLoader, 'dice_textures/2.jpg')
-  const dice_texture_3 = useLoader(TextureLoader, 'dice_textures/3.jpg')
-  const dice_texture_4 = useLoader(TextureLoader, 'dice_textures/4.jpg')
-  const dice_texture_5 = useLoader(TextureLoader, 'dice_textures/5.jpg')
-  const dice_texture_6 = useLoader(TextureLoader, 'dice_textures/6.jpg')
+  const dice_texture_1 = useLoader(TextureLoader, '/dice_textures/1.jpg')
+  const dice_texture_2 = useLoader(TextureLoader, '/dice_textures/2.jpg')
+  const dice_texture_3 = useLoader(TextureLoader, '/dice_textures/3.jpg')
+  const dice_texture_4 = useLoader(TextureLoader, '/dice_textures/4.jpg')
+  const dice_texture_5 = useLoader(TextureLoader, '/dice_textures/5.jpg')
+  const dice_texture_6 = useLoader(TextureLoader, '/dice_textures/6.jpg')
 
   /**
    * Define Refs
@@ -47,8 +47,8 @@ export default function Dice() {
    */
   let meeplePosition: GameBoardElementKeyEnum | undefined
   let canThrowDice: boolean
-  if (currentMeeple) {
-    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple]
+  if (beutomelloGameState && currentPlayer && currentMeeple) {
+    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple].currentGameBoardElement
   }
 
 

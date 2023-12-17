@@ -43,3 +43,8 @@ export enum GamePhaseEnum {
   selectMeeple = 'selectMeeple',
   switchPlayer = 'switchPlayer',
 }
+
+export enum kePhaseEnum {
+  exploring = 'exploring',
+  askingToEnterPlanet = 'askingToEnterPlanet'
+}

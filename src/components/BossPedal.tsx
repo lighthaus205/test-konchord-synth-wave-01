@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { useRef } from "react"
+import { useFrame, useLoader } from "@react-three/fiber"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { useKeyboardControls } from '@react-three/drei'
 import { RigidBody, RapierRigidBody } from '@react-three/rapier'
 

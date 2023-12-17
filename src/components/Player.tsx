@@ -2,19 +2,14 @@ import { ThreeEvent, useFrame } from "@react-three/fiber"
 import useBeutomelloGame from "~/stores/useBeutomelloGame"
 import { MeepleEnum, PlayerEnum, GamePhaseEnum } from "~/utils/enums"
 import * as THREE from 'three'
+import { initialMeeplePositions } from "~/utils/positions"
 
-const initialPositions = {
-  [MeepleEnum.meeple1]: { x: 6.0, z: 6.0 },
-  [MeepleEnum.meeple2]: { x: 6.4, z: 6.4 },
-  [MeepleEnum.meeple3]: { x: 6.8, z: 6.8 },
-  [MeepleEnum.meeple4]: { x: 7.2, z: 7.2 },
-}
 
 const meepleProps: { [key in PlayerEnum]: { meeplePostions: { [key in MeepleEnum]: { x: number, z: number } }, color: string } } = {
-  [PlayerEnum.player1]: { meeplePostions: initialPositions, color: 'red' },
-  [PlayerEnum.player2]: { meeplePostions: initialPositions, color: 'blue' },
-  [PlayerEnum.player3]: { meeplePostions: initialPositions, color: 'yellow' },
-  [PlayerEnum.player4]: { meeplePostions: initialPositions, color: 'green' },
+  [PlayerEnum.player1]: { meeplePostions: initialMeeplePositions, color: 'red' },
+  [PlayerEnum.player2]: { meeplePostions: initialMeeplePositions, color: 'blue' },
+  [PlayerEnum.player3]: { meeplePostions: initialMeeplePositions, color: 'yellow' },
+  [PlayerEnum.player4]: { meeplePostions: initialMeeplePositions, color: 'green' },
 }
 
 function Meeple({

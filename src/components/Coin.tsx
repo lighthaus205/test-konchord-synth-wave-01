@@ -36,8 +36,8 @@ export default function Dice() {
    */
   let meeplePosition: GameBoardElementKeyEnum | undefined
   let canThrowCoin: boolean
-  if (currentMeeple) {
-    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple]
+  if (beutomelloGameState && currentPlayer && currentMeeple) {
+    meeplePosition = beutomelloGameState[currentPlayer][currentMeeple].currentGameBoardElement
   }
   
   if (meeplePosition !== undefined) {

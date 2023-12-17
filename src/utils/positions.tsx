@@ -1,4 +1,4 @@
-import { PlayerEnum, GameBoardElementKeyEnum } from "./enums"
+import { PlayerEnum, GameBoardElementKeyEnum, MeepleEnum } from "./enums"
 
 
 const initialGameBoardPositions = {
@@ -100,4 +100,35 @@ export const meepleAlreadyOnFieldOffsets: {
   [PlayerEnum.player2]: meepleAlreadyOnFieldOffsetPositions,
   [PlayerEnum.player3]: meepleAlreadyOnFieldOffsetPositions,
   [PlayerEnum.player4]: meepleAlreadyOnFieldOffsetPositions,
+}
+
+export const targetOpponentMapping: {[key: number]: number} = {
+  1: 21,
+  2: 20,
+  3: 19,
+  4: 18,
+  5: 17,
+  6: 16,
+  7: 15,
+  8: 14,
+  9: 13,
+  10: 12,
+  11: 11,
+  12: 10,
+  13: 9,
+  14: 8,
+  15: 7,
+  16: 6,
+  17: 5,
+  18: 4,
+  19: 3,
+  20: 2,
+  21: 1,
+}
+
+export const initialMeeplePositions = {
+  [MeepleEnum.meeple1]: { x: 6.0, z: 6.0 },
+  [MeepleEnum.meeple2]: { x: 6.4, z: 6.4 },
+  [MeepleEnum.meeple3]: { x: 6.8, z: 6.8 },
+  [MeepleEnum.meeple4]: { x: 7.2, z: 7.2 },
 }

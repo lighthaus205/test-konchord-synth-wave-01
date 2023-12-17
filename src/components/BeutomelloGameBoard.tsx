@@ -152,7 +152,7 @@ function PlayerText({
 
 
 export default function BeutomelloGameBoard() {
-  const gridMap = useLoader(TextureLoader, 'beutomelloGameBoard.jpg')
+  const gridMap = useLoader(TextureLoader, '/beutomelloGameBoard.jpg')
   const numberOfPlayers = useBeutomelloGame((state) => state.numberOfPlayers)
 
   return <>
