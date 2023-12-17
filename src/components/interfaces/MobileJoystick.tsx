@@ -3,14 +3,16 @@ import { useEffect } from 'react'
 import useMobileJoystick from '~/stores/useMobileJoystick'
 
 
+
 export default function MobileJoystick() {
-  const options = {
+  var options = {
     dynamicPage: true,
     size: 100,
-    mode: 'static',
+    mode: "static",
     color: '#fff',
     position: { left: '50%', bottom: '50%' },
-  }
+  } as const
+
   const options1 = {
     ...options,
     zone: document.getElementById('joystick_zone_1')!,
@@ -19,6 +21,7 @@ export default function MobileJoystick() {
     ...options,
     zone: document.getElementById('joystick_zone_2')!,
   }
+
   var manager1 = nipplejs.create(options1);
   var manager2 = nipplejs.create(options2);
 
