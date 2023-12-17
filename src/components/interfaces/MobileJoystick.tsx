@@ -8,7 +8,7 @@ export default function MobileJoystick() {
     dynamicPage: true,
     size: 100,
     mode: 'static',
-    color: '#ffcc02',
+    color: '#fff',
     position: { left: '50%', bottom: '50%' },
   }
   const options1 = {

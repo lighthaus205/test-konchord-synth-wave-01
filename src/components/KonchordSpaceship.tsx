@@ -242,6 +242,7 @@ export default function KonchordSpaceship() {
           castShadow
           ref={konchordSpaceshipMeshRef}
         >
+          {/* <torusGeometry args={[50, 10, 5, 5]} /> */}
           <primitive
             object={geom}
             attach="geometry"
