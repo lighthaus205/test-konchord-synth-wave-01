@@ -123,3 +123,11 @@ body,
     text-align: center;
     
 } */
+
+
+/**
+ * Stem Player
+ */
+.stem:hover {
+    cursor: pointer;
+}
