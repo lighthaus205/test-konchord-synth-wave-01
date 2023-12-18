@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import * as Tone from 'tone'
 import { ThreeEvent, useFrame } from '@react-three/fiber';
+import * as THREE from 'three'
 
 /**
  * Transport
@@ -24,14 +25,28 @@ const synthPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand
 /**
  * Meters
  */
-const drumMeter = new Tone.Meter();
-drumPlayer.connect(drumMeter);
-const bassMeter = new Tone.Meter();
-bassPlayer.connect(bassMeter);
-const guitarMeter = new Tone.Meter();
-guitarPlayer.connect(guitarMeter);
-const synthMeter = new Tone.Meter();
-synthPlayer.connect(synthMeter);
+const smoothing = 0.98
+
+const drumMeter = new Tone.Meter()
+drumMeter.normalRange = true
+drumMeter.smoothing = smoothing
+drumPlayer.connect(drumMeter)
+
+const bassMeter = new Tone.Meter()
+bassMeter.normalRange = true
+bassMeter.smoothing = smoothing
+bassPlayer.connect(bassMeter)
+
+const guitarMeter = new Tone.Meter()
+guitarMeter.normalRange = true
+guitarMeter.smoothing = smoothing
+guitarPlayer.connect(guitarMeter)
+
+const synthMeter = new Tone.Meter()
+synthMeter.normalRange = true
+synthMeter.smoothing = smoothing
+synthPlayer.connect(synthMeter)
+
 
 /**
  * Loopers
@@ -99,8 +114,58 @@ const stopGuitar = () => {
 }
 
 export default function AndWeDanceHandInHandStemPlayer() {
+  const drumRef = useRef<THREE.Mesh>(null!)
+  const bassRef = useRef<THREE.Mesh>(null!)
+  const guitarRef = useRef<THREE.Mesh>(null!)
+  const synthRef = useRef<THREE.Mesh>(null!)
   useFrame(() => {
-    console.log('drumMeter Value', drumMeter.smoothing)
+    /**
+     * Drum animation
+     */
+    const drumMeterValue = drumMeter.getValue()
+    let drumScaleFactor
+    if (typeof drumMeterValue === 'number') {
+      drumScaleFactor = 1 + drumMeterValue
+    } else {
+      drumScaleFactor = 1
+    }
+    drumRef.current?.scale.set(drumScaleFactor, drumScaleFactor, drumScaleFactor)
+
+    /**
+     * Bass animation
+     */
+    const bassMeterValue = bassMeter.getValue()
+    let bassScaleFactor
+    if (typeof bassMeterValue === 'number') {
+      bassScaleFactor = 1 + bassMeterValue * 1.5
+    } else {
+      bassScaleFactor = 1
+    }
+    bassRef.current?.scale.set(bassScaleFactor, bassScaleFactor, bassScaleFactor)
+
+    /**
+     * Guitar animation
+     */
+    const guitarMeterValue = guitarMeter.getValue()
+    let guitarScaleFactor
+    if (typeof guitarMeterValue === 'number') {
+      guitarScaleFactor = 1 + guitarMeterValue * 2
+    } else {
+      guitarScaleFactor = 1
+    }
+    guitarRef.current?.scale.set(guitarScaleFactor, guitarScaleFactor, guitarScaleFactor)
+
+    /**
+     * Synth animation
+     */
+    const synthMeterValue = synthMeter.getValue()
+    let synthScaleFactor
+    if (typeof synthMeterValue === 'number') {
+      synthScaleFactor = 1 + synthMeterValue * 2
+    } else {
+      synthScaleFactor = 1
+    }
+    synthRef.current?.scale.set(synthScaleFactor, synthScaleFactor, synthScaleFactor)
   })
   const [play, setPlay] = useState(false);
   const playStem = (e: ThreeEvent<MouseEvent>) => {
@@ -164,11 +229,12 @@ export default function AndWeDanceHandInHandStemPlayer() {
     setPlay(false)
   }
 
-  const distance = 15
-  const cubeSize = 5
+  const distance = 6
+  const cubeSize = 3
 
   return <>
     <mesh
+      ref={drumRef}
       position={[distance, 0, distance]}
       onClick={playStem}
       name={drumsId}
@@ -177,6 +243,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
       <meshBasicMaterial color={"red"} />
     </mesh>
     <mesh
+      ref={bassRef}
       position={[-distance, 0, distance]}
       onClick={playStem}
       name={bassId}
@@ -185,6 +252,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
       <meshBasicMaterial color={"blue"} />
     </mesh>
     <mesh
+      ref={guitarRef}
       position={[distance, 0, -distance]}
       onClick={playStem}
       name={guitarId}
@@ -193,6 +261,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
       <meshBasicMaterial color={"green"} />
     </mesh>
     <mesh
+      ref={synthRef}
       position={[-distance, 0, -distance]}
       onClick={playStem}
       name={synthId}

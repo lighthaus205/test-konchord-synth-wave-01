@@ -22,7 +22,7 @@ export default function StartAgain() {
             fov: 75,
             near: 0.01,
             far: 1000,
-            position: [0, 0, 0.1]
+            position: [0, 12, 12]
           }}
         >
           <OrbitControls />
