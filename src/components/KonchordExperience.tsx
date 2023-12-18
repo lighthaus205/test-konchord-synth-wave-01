@@ -9,7 +9,7 @@ import { Environment } from "@react-three/drei"
 export default function KonchordExperience() {
   console.log('render KonchordExperience')
   return <>
-    <Physics >
+    <Physics timeStep="vary">
       <Environment
         files={[
           "environments/konchord-background/px.png",
