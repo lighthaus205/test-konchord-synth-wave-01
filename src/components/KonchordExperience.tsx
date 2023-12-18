@@ -9,18 +9,20 @@ import { Environment } from "@react-three/drei"
 export default function KonchordExperience() {
   console.log('render KonchordExperience')
   return <>
-    <Physics >
-      <Environment
-        files={[
-          "environments/konchord-background/px.png",
-          "environments/konchord-background/nx.png",
-          "environments/konchord-background/py.png",
-          "environments/konchord-background/ny.png",
-          "environments/konchord-background/pz.png",
-          "environments/konchord-background/nz.png",
-        ]}
-        background
-      />
+    <Environment
+      files={[
+        "./environments/konchord-background/px.png",
+        "./environments/konchord-background/nx.png",
+        "./environments/konchord-background/py.png",
+        "./environments/konchord-background/ny.png",
+        "./environments/konchord-background/pz.png",
+        "./environments/konchord-background/nz.png",
+      ]}
+      background
+      preset={undefined}
+      path=""
+    />
+    <Physics timeStep="vary">
       <Lights />
       <KonchordGrid />
       <KonchordSpaceship />
