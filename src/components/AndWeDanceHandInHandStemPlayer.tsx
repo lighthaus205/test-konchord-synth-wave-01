@@ -1,24 +1,43 @@
 import { useState } from 'react'
 import * as Tone from 'tone'
+import { ThreeEvent, useFrame } from '@react-three/fiber';
 
+/**
+ * Transport
+ */
 const transport = Tone.Transport;
 transport.bpm.value = 113
-const drumsPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Drums.ogg").toDestination()
-const bassPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Bass.ogg").toDestination()
-const guitarPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Guitar.ogg").toDestination()
-const synthPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Synth.ogg").toDestination()
-drumsPlayer.loop = true
-bassPlayer.loop = true
-guitarPlayer.loop = true
-synthPlayer.loop = true
 const loopLength = "2m"
 const drumsId: string = 'drum_stems'
 const bassId: string = 'bass_stems'
 const guitarId: string = 'guitar_stems'
 const synthId: string = 'synth_stems'
 
+/**
+ * Players
+ */
+const drumPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Drums.ogg").toDestination()
+const bassPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Bass.ogg").toDestination()
+const guitarPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Guitar.ogg").toDestination()
+const synthPlayer = new Tone.Player("/audio/stemplayer/and_we_dance_hand_in_hand/v0/Synth.ogg").toDestination()
+
+/**
+ * Meters
+ */
+const drumMeter = new Tone.Meter();
+drumPlayer.connect(drumMeter);
+const bassMeter = new Tone.Meter();
+bassPlayer.connect(bassMeter);
+const guitarMeter = new Tone.Meter();
+guitarPlayer.connect(guitarMeter);
+const synthMeter = new Tone.Meter();
+synthPlayer.connect(synthMeter);
+
+/**
+ * Loopers
+ */
 const drumsLoop = new Tone.Loop((time) => {
-  drumsPlayer.start(time);
+  drumPlayer.start(time);
 }, loopLength);
 
 const bassLoop = new Tone.Loop((time) => {
@@ -33,6 +52,9 @@ const guitarLoop = new Tone.Loop((time) => {
   guitarPlayer.start(time);
 }, loopLength);
 
+/**
+ * Play functions
+ */
 const playDrums = () => {
   transport.start();
   drumsLoop.start(0);
@@ -53,9 +75,12 @@ const playGuitar = () => {
   guitarLoop.start(0);
 }
 
+/**
+ * Stop functions
+ */
 const stopDrums = () => {
   drumsLoop.stop();
-  drumsPlayer.stop();
+  drumPlayer.stop();
 }
 
 const stopBass = () => {
@@ -74,10 +99,14 @@ const stopGuitar = () => {
 }
 
 export default function AndWeDanceHandInHandStemPlayer() {
+  useFrame(() => {
+    console.log('drumMeter Value', drumMeter.smoothing)
+  })
   const [play, setPlay] = useState(false);
-  const playStem = (e: React.MouseEvent<HTMLElement>) => {
-    console.log('playStem', e.currentTarget.id)
-    if (e.currentTarget.id === drumsId) {
+  const playStem = (e: ThreeEvent<MouseEvent>) => {
+    console.log('playStem', e)
+    const target = e.object.name
+    if (target === drumsId) {
       Tone.start()
       if (drumsLoop.state === 'stopped') {
         playDrums()
@@ -86,8 +115,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
         stopDrums()
         setPlay(false)
       }
-      
-    } else if (e.currentTarget.id === bassId) {
+    } else if (target === bassId) {
       Tone.start()
       if (bassLoop.state === 'stopped') {
         playBass()
@@ -96,7 +124,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
         stopBass()
         setPlay(false)
       }
-    } else if (e.currentTarget.id === synthId) {
+    } else if (target === synthId) {
       Tone.start()
       if (synthLoop.state === 'stopped') {
         playSynth()
@@ -105,7 +133,7 @@ export default function AndWeDanceHandInHandStemPlayer() {
         stopSynth()
         setPlay(false)
       }
-    } else if (e.currentTarget.id === guitarId) {
+    } else if (target === guitarId) {
       Tone.start()
       if (guitarLoop.state === 'stopped') {
         playGuitar()
@@ -123,21 +151,56 @@ export default function AndWeDanceHandInHandStemPlayer() {
     playBass()
     playSynth()
     playGuitar()
-    // drumsPlayer.start()
-    // bassPlayer.start()
-    // guitarPlayer.start()
-    // synthPlayer.start()
     setPlay(true)
   }
 
   const mute = () => {
     console.log('unmute')
+    stopDrums()
+    stopBass()
+    stopGuitar()
+    stopSynth()
     transport.stop()
     setPlay(false)
   }
 
+  const distance = 15
+  const cubeSize = 5
+
   return <>
-    <div className="flex flex-col items-center justify-center w-full h-screen">
+    <mesh
+      position={[distance, 0, distance]}
+      onClick={playStem}
+      name={drumsId}
+    >
+      <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
+      <meshBasicMaterial color={"red"} />
+    </mesh>
+    <mesh
+      position={[-distance, 0, distance]}
+      onClick={playStem}
+      name={bassId}
+    >
+      <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
+      <meshBasicMaterial color={"blue"} />
+    </mesh>
+    <mesh
+      position={[distance, 0, -distance]}
+      onClick={playStem}
+      name={guitarId}
+    >
+      <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
+      <meshBasicMaterial color={"green"} />
+    </mesh>
+    <mesh
+      position={[-distance, 0, -distance]}
+      onClick={playStem}
+      name={synthId}
+    >
+      <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
+      <meshBasicMaterial color={"yellow"} />
+    </mesh>
+    {/* <div className="flex flex-col items-center justify-center w-full h-screen">
       <div className="mb-8">
         <button id="unmute_button" className="text-white" onClick={play ? mute : unmute}>
           {play === true ? "Mute" : "Unmute"}
@@ -150,6 +213,6 @@ export default function AndWeDanceHandInHandStemPlayer() {
         <div className="stem flex m-2 items-center justify-center w-32 h-32 bg-cyan-500 border-solid border-2" id={synthId} onClick={playStem}>Synth</div>
         <div className="stem flex m-2 items-center justify-center w-32 h-32 bg-cyan-500 border-solid border-2" id={guitarId} onClick={playStem}>Guitar</div>
       </div>
-    </div>
+    </div> */}
   </>;
 }
