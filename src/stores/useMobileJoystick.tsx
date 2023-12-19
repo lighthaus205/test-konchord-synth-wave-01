@@ -13,8 +13,6 @@ interface useMobileJoystickStateInterface {
   direction_l: { x: string, y: string, angle: string }
   direction_r: { x: string, y: string, angle: string }
   setDirection: Function
-  isTouchDevice: boolean
-  setIsTouchDevice: Function
 }
 
 export default create<useMobileJoystickStateInterface>((set) => {
@@ -65,13 +63,6 @@ export default create<useMobileJoystickStateInterface>((set) => {
           return { direction_r: direction }
         }
         return {}
-      })
-    },
-    isTouchDevice: false,
-    setIsTouchDevice: (isTouchDevice: boolean) => {
-      set((state) => {
-        console.log('Setting isTouchDevice...')
-        return { isTouchDevice }
       })
     },
   }

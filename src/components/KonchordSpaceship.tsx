@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useLoader } from "@react-three/fiber"
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader"
@@ -7,9 +7,12 @@ import { useKeyboardControls } from '@react-three/drei'
 import * as THREE from 'three'
 import useKonchordExperience from '~/stores/useKonchordExperience'
 import useMobileJoystick from '~/stores/useMobileJoystick'
+import IsTouchDeviceContext from '~/contexts/IsTouchDeviceContext'
 
 
 export default function KonchordSpaceship() {
+  const { isTouchDevice, setIsTouchDevice } = useContext(IsTouchDeviceContext);
+
   const fileUrl = "/konchord-spaceship/konchord_spaceship.stl"
   const konchordSpaceshipRef = useRef<RapierRigidBody>(null!)
   const konchordSpaceshipMeshRef = useRef<THREE.Mesh>(null!)
@@ -21,7 +24,7 @@ export default function KonchordSpaceship() {
   const joystickDirectionL = useMobileJoystick((state) => state.direction_l)
   const joystickDistanceR = useMobileJoystick((state) => state.distance_r)
   const joystickDirectionR = useMobileJoystick((state) => state.direction_r)
-  const isTouchDevice = useMobileJoystick((state) => state.isTouchDevice)
+  // const isTouchDevice = useMobileJoystick((state) => state.isTouchDevice)
 
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3())
